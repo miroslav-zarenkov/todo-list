@@ -9,12 +9,45 @@ html {
     height: 100vh;
 }
 
+body {
+    font-size: 2rem;
+}
+
 .main-wrapper {
     height: 100vh;
-    display: grid;
+    display: flex;
+    flex-direction: column;
+}
+
+header {
+    flex-shrink: 0;
+    background-color: chocolate;
+}
+
+header h1 {
+    font-size: 5rem;
+    margin: 1rem;
+}
+
+main {
+    flex: 1 0 auto;
+    background-color: bisque;
+}
+
+footer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    background-color: beige;
+}
+
+footer>* {
+    padding: 0.5rem;
 }
 
 .github-logo {
+    display: block;
     width: 32px;
     height: auto;
 }
