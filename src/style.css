@@ -32,6 +32,17 @@ header h1 {
 main {
     flex: 1 0 auto;
     background-color: bisque;
+    display: flex;
+}
+
+.menu {
+    flex-shrink: 0;
+    background-color: rgb(173, 129, 214);
+}
+
+.content {
+    flex: 1 0 auto;
+    background-color: rgb(185, 249, 249);
 }
 
 footer {

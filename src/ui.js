@@ -13,9 +13,14 @@ const renderPage = () => {
     header.appendChild(headerName);
 
     const main = document.createElement("main");
-    const mainP = document.createElement("p");
-    mainP.textContent = "Lorem Ipsum";
-    main.appendChild(mainP);
+    const mainMenuDiv = document.createElement("div");
+    mainMenuDiv.classList.add("menu");
+    mainMenuDiv.textContent = "Inbox";
+    const mainContentDiv = document.createElement("div");
+    mainContentDiv.classList.add("content");
+    mainContentDiv.textContent = "Add Task";
+    main.appendChild(mainMenuDiv);
+    main.appendChild(mainContentDiv);
     
     const footer = document.createElement("footer");
     const footerDiv = document.createElement("div");
