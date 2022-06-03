@@ -22,11 +22,51 @@ body {
 header {
     flex-shrink: 0;
     background-color: chocolate;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 header h1 {
     font-size: 5rem;
     margin: 1rem;
+}
+
+.menu-button {
+    display: none;
+    cursor: pointer;
+    margin: 20px;
+
+}
+
+@media screen and (max-width: 600px) {
+    .menu-button {
+        display: inline-block;
+    }
+}
+
+.menu-button-row-1,
+.menu-button-row-2,
+.menu-button-row-3 {
+    width: 35px;
+    height: 5px;
+    background-color: black;
+    margin: 6px 0;
+    transition: 0.4s;
+}
+
+.change .menu-button-row-1 {
+    -webkit-transform: rotate(-45deg) translate(-9px, 6px);
+    transform: rotate(-45deg) translate(-9px, 6px);
+}
+
+.change .menu-button-row-2 {
+    opacity: 0;
+}
+
+.change .menu-button-row-3 {
+    -webkit-transform: rotate(45deg) translate(-8px, -8px);
+    transform: rotate(45deg) translate(-8px, -8px);
 }
 
 main {

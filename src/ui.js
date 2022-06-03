@@ -4,13 +4,30 @@ import GithubLogo from './github.png';
 
 
 const renderPage = () => {
+    function changeMenuButton(){
+        headerMenuButton.classList.toggle("change");
+    }
+
     const mainWrapper = document.createElement('div');
     mainWrapper.classList.add('main-wrapper');
 
     const header = document.createElement("header");
     const headerName = document.createElement("h1");
     headerName.textContent = "Todo List";
+    const headerMenuButton = document.createElement("div");
+    headerMenuButton.classList.add("menu-button");
+    const headerMenuButtonRow1 = document.createElement("div");
+    headerMenuButtonRow1.classList.add("menu-button-row-1");
+    const headerMenuButtonRow2 = document.createElement("div");
+    headerMenuButtonRow2.classList.add("menu-button-row-2");
+    const headerMenuButtonRow3 = document.createElement("div");
+    headerMenuButtonRow3.classList.add("menu-button-row-3");
     header.appendChild(headerName);
+    header.appendChild(headerMenuButton);
+    headerMenuButton.appendChild(headerMenuButtonRow1);
+    headerMenuButton.appendChild(headerMenuButtonRow2);
+    headerMenuButton.appendChild(headerMenuButtonRow3);
+    headerMenuButton.addEventListener('click', changeMenuButton);
 
     const main = document.createElement("main");
     const mainMenuDiv = document.createElement("div");
