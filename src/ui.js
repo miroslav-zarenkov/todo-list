@@ -4,18 +4,29 @@ import GithubLogo from './github.png';
 
 
 const renderPage = () => {
-    function changeMenuButton(){
-        headerMenuButton.classList.toggle("change");
-    }
-    function toogleSidebar(){
-        main.classList.toggle("active-overlay");
-        mainMenuDiv.classList.toggle("active-overlay");
-    }
-    
+    createWrapper();
+    createHeader();
+    createMain();
+    createFooter();
+    createPage();
+};
 
+const createWrapper = () => {
     const mainWrapper = document.createElement('div');
     mainWrapper.classList.add('main-wrapper');
+    
+    window.addEventListener("resize", function(){
+        if (window.innerWidth > 500) {
+            document.querySelector("main").classList.remove("active-overlay")
+            document.querySelector(".menu").classList.remove("active-overlay");
+            document.querySelector(".menu-button").classList.remove("change");
+        }
+    });
+    
+    return mainWrapper;
+}
 
+const createHeader = () => {
     const header = document.createElement("header");
     const headerName = document.createElement("h1");
     headerName.textContent = "Todo List";
@@ -32,19 +43,42 @@ const renderPage = () => {
     headerMenuButton.appendChild(headerMenuButtonRow1);
     headerMenuButton.appendChild(headerMenuButtonRow2);
     headerMenuButton.appendChild(headerMenuButtonRow3);
-    headerMenuButton.addEventListener('click', changeMenuButton);
-    headerMenuButton.addEventListener('click', toogleSidebar)
+    headerMenuButton.addEventListener('click', () => {
+    headerMenuButton.classList.toggle("change");
+    });
+    headerMenuButton.addEventListener('click', () => {
+        document.querySelector("main").classList.toggle("active-overlay");
+        document.querySelector(".menu").classList.toggle("active-overlay");
+    });
+    return header;
+}
 
+const createMain = () => {
     const main = document.createElement("main");
     const mainMenuDiv = document.createElement("div");
     mainMenuDiv.classList.add("menu");
-    mainMenuDiv.textContent = "Inbox";
+    const mainMenuDivNav = document.createElement("nav");
+    const mainMenuDivNavUl = document.createElement("ul");
+    const mainMenuDivNavUlLi1 = document.createElement("li");
+    mainMenuDivNavUlLi1.textContent = "Inbox";
+    const mainMenuDivNavUlLi2 = document.createElement("li");
+    mainMenuDivNavUlLi2.textContent = "Today";
+    const mainMenuDivNavUlLi3 = document.createElement("li");
+    mainMenuDivNavUlLi3.textContent = "This Week"
     const mainContentDiv = document.createElement("div");
     mainContentDiv.classList.add("content");
     mainContentDiv.textContent = "Add Task";
     main.appendChild(mainMenuDiv);
+    mainMenuDiv.appendChild(mainMenuDivNav);
+    mainMenuDivNav.appendChild(mainMenuDivNavUl);
+    mainMenuDivNavUl.appendChild(mainMenuDivNavUlLi1);
+    mainMenuDivNavUl.appendChild(mainMenuDivNavUlLi2);
+    mainMenuDivNavUl.appendChild(mainMenuDivNavUlLi3);
     main.appendChild(mainContentDiv);
-    
+    return main;
+}
+
+const createFooter = () => {
     const footer = document.createElement("footer");
     const footerDiv = document.createElement("div");
     const footerLink = document.createElement("a");
@@ -58,9 +92,13 @@ const renderPage = () => {
     footer.appendChild(footerDiv);
     footer.appendChild(footerLink);
     footerLink.appendChild(footerLinkImg);
+    return footer;
+}
 
-    document.body.appendChild(mainWrapper);
-    mainWrapper.appendChild(header);
-    mainWrapper.appendChild(main);
-    mainWrapper.appendChild(footer);
-};
+const createPage = () => {
+    document.body.appendChild(createWrapper());
+    document.querySelector(".main-wrapper").appendChild(createHeader());
+    document.querySelector(".main-wrapper").appendChild(createMain());
+    document.querySelector(".main-wrapper").appendChild(createFooter());
+}
+

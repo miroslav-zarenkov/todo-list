@@ -97,7 +97,18 @@ footer>* {
     height: auto;
 }
 
-@media screen and (max-width: 600px) {
+nav {
+    padding: 2rem;
+    margin: 2rem;
+    font-size: 3rem;
+}
+
+li {
+    margin: 1rem;
+}
+
+
+@media screen and (max-width: 500px) {
     .menu-button {
         display: inline-block;
     }
