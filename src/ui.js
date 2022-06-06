@@ -7,6 +7,11 @@ const renderPage = () => {
     function changeMenuButton(){
         headerMenuButton.classList.toggle("change");
     }
+    function toogleSidebar(){
+        main.classList.toggle("active-overlay");
+        mainMenuDiv.classList.toggle("active-overlay");
+    }
+    
 
     const mainWrapper = document.createElement('div');
     mainWrapper.classList.add('main-wrapper');
@@ -28,6 +33,7 @@ const renderPage = () => {
     headerMenuButton.appendChild(headerMenuButtonRow2);
     headerMenuButton.appendChild(headerMenuButtonRow3);
     headerMenuButton.addEventListener('click', changeMenuButton);
+    headerMenuButton.addEventListener('click', toogleSidebar)
 
     const main = document.createElement("main");
     const mainMenuDiv = document.createElement("div");

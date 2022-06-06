@@ -39,12 +39,6 @@ header h1 {
 
 }
 
-@media screen and (max-width: 600px) {
-    .menu-button {
-        display: inline-block;
-    }
-}
-
 .menu-button-row-1,
 .menu-button-row-2,
 .menu-button-row-3 {
@@ -101,4 +95,28 @@ footer>* {
     display: block;
     width: 32px;
     height: auto;
+}
+
+@media screen and (max-width: 600px) {
+    .menu-button {
+        display: inline-block;
+    }
+
+    .menu {
+        /*hidind and showing sidebar on small screen*/
+        display: none;
+    }
+}
+
+main.active-overlay {
+    /*hidind and showing sidebar on small screen*/
+    display: block;
+}
+
+.menu.active-overlay {
+    /*hidind and showing sidebar on small screen*/
+    position: relative;
+    height: 100%;
+    z-index: 99;
+    display: flex;
 }
