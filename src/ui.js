@@ -1,6 +1,7 @@
 export { renderPage };
 import './style.css';
 import GithubLogo from './github.png';
+import { todoObject, taskList } from './task-logic';
 
 
 const renderPage = () => {
@@ -60,14 +61,16 @@ const createMain = () => {
     const mainMenuDivNav = document.createElement("nav");
     const mainMenuDivNavUl = document.createElement("ul");
     const mainMenuDivNavUlLi1 = document.createElement("li");
+    mainMenuDivNavUlLi1.classList.add("nav-list-inbox");
     mainMenuDivNavUlLi1.textContent = "Inbox";
     const mainMenuDivNavUlLi2 = document.createElement("li");
+    mainMenuDivNavUlLi2.classList.add("nav-list-today");
     mainMenuDivNavUlLi2.textContent = "Today";
     const mainMenuDivNavUlLi3 = document.createElement("li");
+    mainMenuDivNavUlLi3.classList.add("nav-list-week");
     mainMenuDivNavUlLi3.textContent = "This Week"
     const mainContentDiv = document.createElement("div");
     mainContentDiv.classList.add("content");
-    mainContentDiv.textContent = "Add Task";
     main.appendChild(mainMenuDiv);
     mainMenuDiv.appendChild(mainMenuDivNav);
     mainMenuDivNav.appendChild(mainMenuDivNavUl);
@@ -100,5 +103,67 @@ const createPage = () => {
     document.querySelector(".main-wrapper").appendChild(createHeader());
     document.querySelector(".main-wrapper").appendChild(createMain());
     document.querySelector(".main-wrapper").appendChild(createFooter());
+    createInbox();
+    document.querySelector(".nav-list-inbox").addEventListener("click", createInbox);
+    document.querySelector(".nav-list-today").addEventListener("click", createToday);
+    document.querySelector(".nav-list-week").addEventListener("click", createWeek);
+}
+
+const clearContent = () => {
+    let myNode = document.querySelector(".content");
+    while (myNode.firstChild) {
+      myNode.removeChild(myNode.lastChild);
+}}
+
+const createInbox = () => {
+    clearContent();
+    const inboxWrapper = document.createElement("div");
+    inboxWrapper.classList.add("index-wrapper");
+    const inboxHeader = document.createElement("h2");
+    inboxHeader.textContent = "Inbox";
+    inboxWrapper.appendChild(inboxHeader);
+    document.querySelector(".content").appendChild(inboxWrapper);
+    const mainObj = document.createElement("div");
+    mainObj.textContent = JSON.stringify(taskList);
+    inboxWrapper.appendChild(mainObj);
+
+    const addTaskBtn = document.createElement("button");
+    addTaskBtn.textContent = "Add task";
+    inboxWrapper.appendChild(addTaskBtn);
+}
+
+
+const createToday = () => {
+    clearContent();
+    const todayWrapper = document.createElement("div");
+    todayWrapper.classList.add("today-wrapper");
+    const todayHeader = document.createElement("h2");
+    todayHeader.textContent = "Today";
+    todayWrapper.appendChild(todayHeader);
+    document.querySelector(".content").appendChild(todayWrapper);
+    const mainObj = document.createElement("div");
+    mainObj.textContent = JSON.stringify(taskList);
+    todayWrapper.appendChild(mainObj);
+
+    const addTaskBtn = document.createElement("button");
+    addTaskBtn.textContent = "Add task";
+    todayWrapper.appendChild(addTaskBtn);
+}
+
+const createWeek = () => {
+    clearContent();
+    const weekWrapper = document.createElement("div");
+    weekWrapper.classList.add("week-wrapper");
+    const weekHeader = document.createElement("h2");
+    weekHeader.textContent = "This Week";
+    weekWrapper.appendChild(weekHeader);
+    document.querySelector(".content").appendChild(weekWrapper);
+    const mainObj = document.createElement("div");
+    mainObj.textContent = JSON.stringify(taskList);
+    weekWrapper.appendChild(mainObj);
+
+    const addTaskBtn = document.createElement("button");
+    addTaskBtn.textContent = "Add task";
+    weekWrapper.appendChild(addTaskBtn);
 }
 
