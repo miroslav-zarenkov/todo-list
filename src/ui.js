@@ -1,7 +1,7 @@
 export { renderPage };
 import './style.css';
 import GithubLogo from './github.png';
-import { todoObject, taskList } from './task-logic';
+import { taskList } from './task-logic';
 
 
 const renderPage = () => {
@@ -10,6 +10,7 @@ const renderPage = () => {
     createMain();
     createFooter();
     createPage();
+    addTaskContainer();
 };
 
 const createWrapper = () => {
@@ -118,18 +119,19 @@ const clearContent = () => {
 const createInbox = () => {
     clearContent();
     const inboxWrapper = document.createElement("div");
-    inboxWrapper.classList.add("index-wrapper");
+    inboxWrapper.classList.add("inbox-wrapper");
     const inboxHeader = document.createElement("h2");
     inboxHeader.textContent = "Inbox";
     inboxWrapper.appendChild(inboxHeader);
     document.querySelector(".content").appendChild(inboxWrapper);
-    const mainObj = document.createElement("div");
-    mainObj.textContent = JSON.stringify(taskList);
-    inboxWrapper.appendChild(mainObj);
+
+    createTaskElement();
 
     const addTaskBtn = document.createElement("button");
     addTaskBtn.textContent = "Add task";
+    addTaskBtn.addEventListener("click", addTask);
     inboxWrapper.appendChild(addTaskBtn);
+    
 }
 
 
@@ -167,3 +169,28 @@ const createWeek = () => {
     weekWrapper.appendChild(addTaskBtn);
 }
 
+const createTaskElement = () => {
+    taskList.forEach(element => {
+    const mainObj = document.createElement("div");
+    mainObj.textContent = JSON.stringify(element);
+    document.querySelector(".inbox-wrapper").appendChild(mainObj);
+});
+}
+
+const addTaskContainer =() => {
+    const addTaskContainer = document.createElement("div");
+    addTaskContainer.classList.add("add-task-container", "popup-inactive");
+    addTaskContainer.textContent = "test div";
+    document.querySelector(".main-wrapper").appendChild(addTaskContainer);
+}
+
+const addTask = () => {
+    document.querySelector(".add-task-container").classList.toggle("popup-inactive");
+    document.querySelector("header").classList.toggle("blur");
+    document.querySelector("main").classList.toggle("blur");
+    document.querySelector("footer").classList.toggle("blur");
+}
+
+const consoleKek = () => {
+    console.log("kek");
+}
