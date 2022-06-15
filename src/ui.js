@@ -1,7 +1,7 @@
-export { renderPage };
+export { renderPage, clearContent, createInbox, toggleAddTaskContainer };
 import './style.css';
 import GithubLogo from './github.png';
-import { taskList } from './task-logic';
+import { taskList, addTaskToTaskList } from './task-logic';
 
 
 const renderPage = () => {
@@ -114,7 +114,8 @@ const clearContent = () => {
     let myNode = document.querySelector(".content");
     while (myNode.firstChild) {
       myNode.removeChild(myNode.lastChild);
-}}
+}
+}
 
 const createInbox = () => {
     clearContent();
@@ -184,18 +185,56 @@ const createTaskElement = () => {
 const addTaskContainer =() => {
     const addTaskContainer = document.createElement("div");
     addTaskContainer.classList.add("add-task-container", "inactive");
-    addTaskContainer.textContent = "test div";
     document.querySelector(".inbox-wrapper").appendChild(addTaskContainer);
+    const addTaskForm = document.createElement("form");
+    addTaskForm.setAttribute("action", "#");
+    addTaskForm.setAttribute("method", "post");
+
+    const taskNameLabel = document.createElement("label");
+    taskNameLabel.setAttribute("for", "task-name-input");
+    taskNameLabel.textContent = "Task Name";
+    const taskNameLabelInput = document.createElement("input");
+    taskNameLabelInput.setAttribute("type", "text");
+    taskNameLabelInput.setAttribute("id", "task-name-input");
+    taskNameLabelInput.setAttribute("name", "task-name-input");
+    taskNameLabel.appendChild(taskNameLabelInput);
+
+    const taskDetailsLabel = document.createElement("label");
+    taskDetailsLabel.setAttribute("for", "task-detail-input");
+    taskDetailsLabel.textContent = "Task Details";
+    const taskDetailsLabelInput = document.createElement("input");
+    taskDetailsLabelInput.setAttribute("type", "text");
+    taskDetailsLabelInput.setAttribute("id", "task-details-input");
+    taskDetailsLabelInput.setAttribute("name", "task-details-input");
+    taskDetailsLabel.appendChild(taskDetailsLabelInput);
+
+    const taskCategoryLabel = document.createElement("label");
+    taskCategoryLabel.setAttribute("for", "task-category-input");
+    taskCategoryLabel.textContent = "Task Category";
+    const taskCategoryLabelInput = document.createElement("input");
+    taskCategoryLabelInput.setAttribute("type", "text");
+    taskCategoryLabelInput.setAttribute("id", "task-category-input");
+    taskCategoryLabelInput.setAttribute("name", "task-category-input");
+    taskCategoryLabel.appendChild(taskCategoryLabelInput);
+
+
+    addTaskForm.appendChild(taskNameLabel);
+    addTaskForm.appendChild(taskDetailsLabel);
+    addTaskForm.appendChild(taskCategoryLabel);
+    addTaskContainer.appendChild(addTaskForm);
+
+
     const addTaskContainerConfirmBtn = document.createElement("button");
     addTaskContainerConfirmBtn.classList.add("confirm-new-task");
     addTaskContainerConfirmBtn.textContent = "Confirm";
+    addTaskContainer.appendChild(addTaskContainerConfirmBtn);
+    addTaskContainerConfirmBtn.addEventListener("click", addTaskToTaskList);
     const addTaskContainerCancelBtn = document.createElement("button");
     addTaskContainerCancelBtn.classList.add("cancel-new-task");
     addTaskContainerCancelBtn.textContent = "Cancel";
-    addTaskContainer.appendChild(addTaskContainerConfirmBtn);
     addTaskContainer.appendChild(addTaskContainerCancelBtn);
-    addTaskContainerConfirmBtn.addEventListener("click", toggleAddTaskContainer);
     addTaskContainerCancelBtn.addEventListener("click", toggleAddTaskContainer);
+    addTaskContainerCancelBtn.addEventListener("click", clearInput);
 }
 
 const toggleAddTaskContainer = () => {
@@ -203,6 +242,8 @@ const toggleAddTaskContainer = () => {
     document.querySelector(".add-task-btn").classList.toggle("inactive");
 }
 
-
-
-
+const clearInput = () => {
+    document.querySelector("#task-name-input").value = "";
+    document.querySelector("#task-details-input").value = "";
+    document.querySelector("#task-category-input").value = "";
+}
