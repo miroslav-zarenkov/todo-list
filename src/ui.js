@@ -10,7 +10,6 @@ const renderPage = () => {
     createMain();
     createFooter();
     createPage();
-    addTaskContainer();
 };
 
 const createWrapper = () => {
@@ -79,6 +78,7 @@ const createMain = () => {
     mainMenuDivNavUl.appendChild(mainMenuDivNavUlLi2);
     mainMenuDivNavUl.appendChild(mainMenuDivNavUlLi3);
     main.appendChild(mainContentDiv);
+    
     return main;
 }
 
@@ -124,14 +124,18 @@ const createInbox = () => {
     inboxHeader.textContent = "Inbox";
     inboxWrapper.appendChild(inboxHeader);
     document.querySelector(".content").appendChild(inboxWrapper);
+    const listWrapper = document.createElement("div");
+    listWrapper.classList.add("list-wrapper");
+    inboxWrapper.appendChild(listWrapper);
 
     createTaskElement();
 
     const addTaskBtn = document.createElement("button");
+    addTaskBtn.classList.add("add-task-btn");
     addTaskBtn.textContent = "Add task";
-    addTaskBtn.addEventListener("click", addTask);
+    addTaskBtn.addEventListener("click", toggleAddTaskContainer);
     inboxWrapper.appendChild(addTaskBtn);
-    
+    addTaskContainer();
 }
 
 
@@ -143,9 +147,9 @@ const createToday = () => {
     todayHeader.textContent = "Today";
     todayWrapper.appendChild(todayHeader);
     document.querySelector(".content").appendChild(todayWrapper);
-    const mainObj = document.createElement("div");
-    mainObj.textContent = JSON.stringify(taskList);
-    todayWrapper.appendChild(mainObj);
+    const taskObjectsList = document.createElement("div");
+    taskObjectsList.textContent = JSON.stringify(taskList);
+    todayWrapper.appendChild(taskObjectsList);
 
     const addTaskBtn = document.createElement("button");
     addTaskBtn.textContent = "Add task";
@@ -160,9 +164,9 @@ const createWeek = () => {
     weekHeader.textContent = "This Week";
     weekWrapper.appendChild(weekHeader);
     document.querySelector(".content").appendChild(weekWrapper);
-    const mainObj = document.createElement("div");
-    mainObj.textContent = JSON.stringify(taskList);
-    weekWrapper.appendChild(mainObj);
+    const taskObjectsList = document.createElement("div");
+    taskObjectsList.textContent = JSON.stringify(taskList);
+    weekWrapper.appendChild(taskObjectsList);
 
     const addTaskBtn = document.createElement("button");
     addTaskBtn.textContent = "Add task";
@@ -171,26 +175,34 @@ const createWeek = () => {
 
 const createTaskElement = () => {
     taskList.forEach(element => {
-    const mainObj = document.createElement("div");
-    mainObj.textContent = JSON.stringify(element);
-    document.querySelector(".inbox-wrapper").appendChild(mainObj);
+    const taskObjectsList = document.createElement("div");
+    taskObjectsList.textContent = JSON.stringify(element);
+    document.querySelector(".list-wrapper").appendChild(taskObjectsList);
 });
 }
 
 const addTaskContainer =() => {
     const addTaskContainer = document.createElement("div");
-    addTaskContainer.classList.add("add-task-container", "popup-inactive");
+    addTaskContainer.classList.add("add-task-container", "inactive");
     addTaskContainer.textContent = "test div";
-    document.querySelector(".main-wrapper").appendChild(addTaskContainer);
+    document.querySelector(".inbox-wrapper").appendChild(addTaskContainer);
+    const addTaskContainerConfirmBtn = document.createElement("button");
+    addTaskContainerConfirmBtn.classList.add("confirm-new-task");
+    addTaskContainerConfirmBtn.textContent = "Confirm";
+    const addTaskContainerCancelBtn = document.createElement("button");
+    addTaskContainerCancelBtn.classList.add("cancel-new-task");
+    addTaskContainerCancelBtn.textContent = "Cancel";
+    addTaskContainer.appendChild(addTaskContainerConfirmBtn);
+    addTaskContainer.appendChild(addTaskContainerCancelBtn);
+    addTaskContainerConfirmBtn.addEventListener("click", toggleAddTaskContainer);
+    addTaskContainerCancelBtn.addEventListener("click", toggleAddTaskContainer);
 }
 
-const addTask = () => {
-    document.querySelector(".add-task-container").classList.toggle("popup-inactive");
-    document.querySelector("header").classList.toggle("blur");
-    document.querySelector("main").classList.toggle("blur");
-    document.querySelector("footer").classList.toggle("blur");
+const toggleAddTaskContainer = () => {
+    document.querySelector(".add-task-container").classList.toggle("inactive");
+    document.querySelector(".add-task-btn").classList.toggle("inactive");
 }
 
-const consoleKek = () => {
-    console.log("kek");
-}
+
+
+

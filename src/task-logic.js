@@ -11,6 +11,7 @@ const taskFactory = (taskName, taskDate, taskCategory) => {
 let todoObject1 = taskFactory("task1", "task1", "task1");
 let todoObject2 = taskFactory("task2", "task2", "task2");
 let todoObject3 = taskFactory("task3", "task3", "task3");
+let todoObject4 = taskFactory("task4", "task4", "task4");
 
 (function addTaskToTaskList(){
     if (taskList === null) {
@@ -19,6 +20,7 @@ let todoObject3 = taskFactory("task3", "task3", "task3");
     taskList.push(todoObject1);
     taskList.push(todoObject2);
     taskList.push(todoObject3);
+    taskList.push(todoObject4);
 })()
 
 function addToLocalStorage() {
