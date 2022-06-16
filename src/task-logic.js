@@ -1,8 +1,12 @@
-export { taskList, addTaskToTaskList, getFromLocalStorage };
+export { taskList, addTaskToTaskList, getFromLocalStorage, clearLocalStorage, emptyArrayTaskList };
 import { clearContent, createInbox, toggleAddTaskContainer } from "./ui.js";
 
 
 let taskList = [];
+
+function emptyArrayTaskList(){
+    taskList = [];
+}
 
 class Task {
     constructor(taskName, taskDetails, taskCategory) {

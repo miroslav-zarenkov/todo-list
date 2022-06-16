@@ -1,7 +1,7 @@
 export { renderPage, clearContent, createInbox, toggleAddTaskContainer };
 import './style.css';
 import GithubLogo from './github.png';
-import { taskList, addTaskToTaskList, getFromLocalStorage } from './task-logic';
+import { taskList, addTaskToTaskList, getFromLocalStorage, clearLocalStorage, emptyArrayTaskList } from './task-logic';
 
 
 const renderPage = () => {
@@ -51,6 +51,12 @@ const createHeader = () => {
         document.querySelector("main").classList.toggle("active-overlay");
         document.querySelector(".menu").classList.toggle("active-overlay");
     });
+
+    const trash = document.createElement("button");
+    trash.textContent = "Delete local storage";
+    trash.addEventListener("click", clearLocalStorage);
+    header.appendChild(trash);
+    
     return header;
 }
 
@@ -176,7 +182,7 @@ const createWeek = () => {
 
 const createTaskElement = () => {
     getFromLocalStorage();
-    if (taskList === null) taskList = [];
+    if (taskList === null) emptyArrayTaskList();
     taskList.forEach(element => {
     const taskObjectsList = document.createElement("div");
     taskObjectsList.textContent = JSON.stringify(element);
