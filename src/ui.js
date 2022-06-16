@@ -1,7 +1,7 @@
 export { renderPage, clearContent, createInbox, toggleAddTaskContainer };
 import './style.css';
 import GithubLogo from './github.png';
-import { taskList, addTaskToTaskList } from './task-logic';
+import { taskList, addTaskToTaskList, getFromLocalStorage } from './task-logic';
 
 
 const renderPage = () => {
@@ -175,6 +175,8 @@ const createWeek = () => {
 }
 
 const createTaskElement = () => {
+    getFromLocalStorage();
+    if (taskList === null) taskList = [];
     taskList.forEach(element => {
     const taskObjectsList = document.createElement("div");
     taskObjectsList.textContent = JSON.stringify(element);

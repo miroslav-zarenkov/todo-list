@@ -1,4 +1,4 @@
-export { taskList, addTaskToTaskList };
+export { taskList, addTaskToTaskList, getFromLocalStorage };
 import { clearContent, createInbox, toggleAddTaskContainer } from "./ui.js";
 
 
@@ -24,6 +24,7 @@ function addTaskToTaskList() {
     )
 
     taskList.push(task);
+    addToLocalStorage();
     document.querySelector("#task-name-input").value = "";
     document.querySelector("#task-details-input").value = "";
     document.querySelector("#task-category-input").value = "";
