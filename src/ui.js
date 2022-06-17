@@ -1,7 +1,7 @@
 export { renderPage, clearContent, createInbox, toggleAddTaskContainer };
 import './style.css';
 import GithubLogo from './github.png';
-import { taskList, addTaskToTaskList, getFromLocalStorage, clearLocalStorage, emptyArrayTaskList } from './task-logic';
+import { taskList, addTaskToTaskList, getFromLocalStorage, clearLocalStorage, setEmptyArrayTaskList } from './task-logic';
 
 
 const renderPage = () => {
@@ -138,7 +138,7 @@ const createInbox = () => {
     createTaskElement();
 
     const addTaskBtn = document.createElement("button");
-    addTaskBtn.classList.add("add-task-btn");
+    addTaskBtn.classList.add("add-task-btn", "active");
     addTaskBtn.textContent = "Add task";
     addTaskBtn.addEventListener("click", toggleAddTaskContainer);
     inboxWrapper.appendChild(addTaskBtn);
@@ -182,7 +182,7 @@ const createWeek = () => {
 
 const createTaskElement = () => {
     getFromLocalStorage();
-    if (taskList === null) emptyArrayTaskList();
+    if (taskList === null) setEmptyArrayTaskList();
     taskList.forEach(element => {
     const taskObjectsList = document.createElement("div");
     taskObjectsList.textContent = JSON.stringify(element);
@@ -210,8 +210,7 @@ const addTaskContainer =() => {
     const taskDetailsLabel = document.createElement("label");
     taskDetailsLabel.setAttribute("for", "task-detail-input");
     taskDetailsLabel.textContent = "Task Details";
-    const taskDetailsLabelInput = document.createElement("input");
-    taskDetailsLabelInput.setAttribute("type", "text");
+    const taskDetailsLabelInput = document.createElement("textarea");
     taskDetailsLabelInput.setAttribute("id", "task-details-input");
     taskDetailsLabelInput.setAttribute("name", "task-details-input");
     taskDetailsLabel.appendChild(taskDetailsLabelInput);
@@ -225,29 +224,67 @@ const addTaskContainer =() => {
     taskCategoryLabelInput.setAttribute("name", "task-category-input");
     taskCategoryLabel.appendChild(taskCategoryLabelInput);
 
+    const taskDateLabel = document.createElement("label");
+    taskDateLabel.setAttribute("for", "task-date-input");
+    taskDateLabel.textContent = "Task Date";
+    const taskDateLabelInput = document.createElement("input");
+    taskDateLabelInput.setAttribute("type", "date");
+    taskDateLabelInput.setAttribute("id", "task-date-input");
+    taskDateLabelInput.setAttribute("name", "task-date-input");
+    taskDateLabel.appendChild(taskDateLabelInput);
+
+    const taskPriorityabel = document.createElement("label");
+    taskPriorityabel.setAttribute("for", "task-priority-input");
+    taskPriorityabel.textContent = "Task Priority";
+    const taskPriorityLabelInput = document.createElement("select");
+    const taskPriorityLabelInputNone = document.createElement("option");
+    taskPriorityLabelInputNone.textContent = "";
+    taskPriorityLabelInputNone.setAttribute("value", "none");
+    const taskPriorityLabelInputLow = document.createElement("option");
+    taskPriorityLabelInputLow.textContent = "Low";
+    taskPriorityLabelInputLow.setAttribute("value", "low");
+    const taskPriorityLabelInputMedium = document.createElement("option");
+    taskPriorityLabelInputMedium.textContent = "Medium";
+    taskPriorityLabelInputMedium.setAttribute("value", "medium");
+    const taskPriorityLabelInputHigh = document.createElement("option");
+    taskPriorityLabelInputHigh.textContent = "High";
+    taskPriorityLabelInputHigh.setAttribute("value", "high");
+    taskPriorityLabelInput.setAttribute("id", "task-priority-input");
+    taskPriorityLabelInput.setAttribute("name", "task-priority-input");
+    taskPriorityLabelInput.appendChild(taskPriorityLabelInputNone);
+    taskPriorityLabelInput.appendChild(taskPriorityLabelInputLow);
+    taskPriorityLabelInput.appendChild(taskPriorityLabelInputMedium);
+    taskPriorityLabelInput.appendChild(taskPriorityLabelInputHigh);
+    taskPriorityabel.appendChild(taskPriorityLabelInput);
 
     addTaskForm.appendChild(taskNameLabel);
     addTaskForm.appendChild(taskDetailsLabel);
     addTaskForm.appendChild(taskCategoryLabel);
+    addTaskForm.appendChild(taskDateLabel);
+    addTaskForm.appendChild(taskPriorityabel);
     addTaskContainer.appendChild(addTaskForm);
 
-
+    const addTaskContainerButtons = document.createElement('div');
+    addTaskContainerButtons.classList.add('add-task-buttons-wrapper');
+    addTaskContainer.appendChild(addTaskContainerButtons);
     const addTaskContainerConfirmBtn = document.createElement("button");
     addTaskContainerConfirmBtn.classList.add("confirm-new-task");
     addTaskContainerConfirmBtn.textContent = "Confirm";
-    addTaskContainer.appendChild(addTaskContainerConfirmBtn);
+    addTaskContainerButtons.appendChild(addTaskContainerConfirmBtn);
     addTaskContainerConfirmBtn.addEventListener("click", addTaskToTaskList);
     const addTaskContainerCancelBtn = document.createElement("button");
     addTaskContainerCancelBtn.classList.add("cancel-new-task");
     addTaskContainerCancelBtn.textContent = "Cancel";
-    addTaskContainer.appendChild(addTaskContainerCancelBtn);
+    addTaskContainerButtons.appendChild(addTaskContainerCancelBtn);
     addTaskContainerCancelBtn.addEventListener("click", toggleAddTaskContainer);
     addTaskContainerCancelBtn.addEventListener("click", clearInput);
 }
 
 const toggleAddTaskContainer = () => {
     document.querySelector(".add-task-container").classList.toggle("inactive");
+    document.querySelector(".add-task-container").classList.toggle("active");
     document.querySelector(".add-task-btn").classList.toggle("inactive");
+    document.querySelector(".add-task-btn").classList.toggle("active");
 }
 
 const clearInput = () => {
