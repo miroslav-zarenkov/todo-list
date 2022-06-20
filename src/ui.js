@@ -1,7 +1,7 @@
 export { renderPage, clearContent, createInbox, toggleAddTaskContainer };
 import './style.css';
 import GithubLogo from './github.png';
-import { taskList, addTaskToTaskList, getFromLocalStorage, clearLocalStorage, setEmptyArrayTaskList } from './task-logic';
+import { taskList, addTaskToTaskList, getFromLocalStorage, clearLocalStorage, setEmptyArrayTaskList,addToLocalStorage } from './task-logic';
 
 
 const renderPage = () => {
@@ -134,9 +134,7 @@ const createInbox = () => {
     const listWrapper = document.createElement("div");
     listWrapper.classList.add("list-wrapper");
     inboxWrapper.appendChild(listWrapper);
-
     createTaskElement();
-
     const addTaskBtn = document.createElement("button");
     addTaskBtn.classList.add("add-task-btn", "active");
     addTaskBtn.textContent = "Add task";
@@ -183,12 +181,46 @@ const createWeek = () => {
 const createTaskElement = () => {
     getFromLocalStorage();
     if (taskList === null) setEmptyArrayTaskList();
-    taskList.forEach(element => {
+    for (let i = 0; i < taskList.length; i++) {
+    console.log(taskList[i]);
+    const taskCard = document.createElement("div");
+    taskCard.classList.add("task-card");
+    taskCard.setAttribute("data-number", i);
+    if (taskList[i].taskPriority === "high") taskCard.classList.add("high-importance");
+    if (taskList[i].taskPriority === "medium") taskCard.classList.add("medium-importance");
+    if (taskList[i].taskPriority === "low") taskCard.classList.add("low-importance");
+    if (taskList[i].checked === true) taskCard.classList.add("checked");
+    
+    const taskCardCheck = document.createElement("input");
+    taskCardCheck.setAttribute("type", "checkbox");
+    if (taskList[i].checked === true) taskCardCheck.checked = true;
+    const taskCardName = document.createElement("div");
+    taskCardName.textContent = taskList[i].taskName;
+    taskCard.appendChild(taskCardCheck);
+    taskCard.appendChild(taskCardName);
+    console.log(taskCardCheck.value)
+    document.querySelector(".list-wrapper").appendChild(taskCard);
+    }
+
+    const checkBtns = document.querySelectorAll("input[type=checkbox]")
+
+    checkBtns.forEach(btn => {
+        btn.addEventListener("click", event => {
+            btn.checked != btn.checked;
+            const taskNumber = btn.parentElement.getAttribute("data-number");
+            taskList[taskNumber].checked = btn.checked;
+            console.log(taskList[taskNumber].checked)
+            btn.parentElement.classList.toggle("checked");
+            addToLocalStorage();
+        })
+    })
+}
+    /* taskList.forEach(element => {
     const taskObjectsList = document.createElement("div");
     taskObjectsList.textContent = JSON.stringify(element);
     document.querySelector(".list-wrapper").appendChild(taskObjectsList);
-});
-}
+}); */
+
 
 const addTaskContainer =() => {
     const addTaskContainer = document.createElement("div");

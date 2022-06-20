@@ -1,3 +1,7 @@
+:root {
+    --main-red: #c40505;
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -21,7 +25,7 @@ body {
 
 header {
     flex-shrink: 0;
-    background-color: #c40505;
+    background-color: var(--main-red);
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -94,18 +98,20 @@ main {
 
 
 .content>* {
-    padding: 2rem;
-    margin: 2rem;
+    padding: 1.25rem;
+    margin: 1.25rem;
 }
 
-.inbox-wrapper {}
+.inbox-wrapper {
+    width: 100%;
+}
 
 footer {
     display: flex;
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
-    background-color: #c40505;
+    background-color: var(--main-red);
     font-size: 2rem;
 }
 
@@ -125,8 +131,19 @@ nav {
     font-size: 3rem;
 }
 
+ul {
+    list-style-type: none;
+}
+
 li {
     margin: 1rem;
+}
+
+
+.task-card {
+    margin: 1rem;
+    padding: 1rem;
+    border-bottom: 1px solid black;
 }
 
 .blur {
@@ -202,8 +219,25 @@ label {
     flex-direction: column;
 }
 
-input,
-select,
-textarea {
-    width: 300px;
+.add-task-container input,
+.add-task-container select,
+.add-task-container textarea {
+    width: 200px;
+}
+
+.high-importance {
+    background-color: rgb(237, 104, 104);
+}
+
+.medium-importance {
+    background-color: rgb(237, 228, 104);
+}
+
+.low-importance {
+    background-color: rgb(104, 237, 144);
+}
+
+.checked {
+    text-decoration: line-through;
+    opacity: 0.5;
 }

@@ -1,4 +1,4 @@
-export { taskList, addTaskToTaskList, getFromLocalStorage, clearLocalStorage, setEmptyArrayTaskList };
+export { taskList, addTaskToTaskList, getFromLocalStorage, clearLocalStorage, setEmptyArrayTaskList, addToLocalStorage };
 import { clearContent, createInbox, toggleAddTaskContainer } from "./ui.js";
 
 
@@ -15,6 +15,7 @@ class Task {
         this.taskCategory = taskCategory;
         this.taskDate = taskDate;
         this.taskPriority = taskPriority;
+        this.checked = true;
     }
 }
 
