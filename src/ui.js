@@ -1,6 +1,7 @@
 export { renderPage, clearContent, createInbox, toggleAddTaskContainer };
 import './style.css';
 import GithubLogo from './github.png';
+import TrashImage from './trash.png'
 import { taskList, addTaskToTaskList, getFromLocalStorage, clearLocalStorage, setEmptyArrayTaskList,addToLocalStorage } from './task-logic';
 
 
@@ -196,14 +197,17 @@ const createTaskElement = () => {
     if (taskList[i].checked === true) taskCardCheck.checked = true;
     const taskCardName = document.createElement("div");
     taskCardName.textContent = taskList[i].taskName;
+
+    const deleteTaskBtn = document.createElement("img");
+    deleteTaskBtn.classList.add("trash-btn");
+    deleteTaskBtn.setAttribute("src", TrashImage);
     taskCard.appendChild(taskCardCheck);
     taskCard.appendChild(taskCardName);
-    console.log(taskCardCheck.value)
+    taskCard.appendChild(deleteTaskBtn);
     document.querySelector(".list-wrapper").appendChild(taskCard);
     }
 
     const checkBtns = document.querySelectorAll("input[type=checkbox]")
-
     checkBtns.forEach(btn => {
         btn.addEventListener("click", event => {
             btn.checked != btn.checked;
@@ -212,6 +216,18 @@ const createTaskElement = () => {
             console.log(taskList[taskNumber].checked)
             btn.parentElement.classList.toggle("checked");
             addToLocalStorage();
+        })
+    })
+
+    const deleteBtn = document.querySelectorAll(".trash-btn");
+    deleteBtn.forEach(btn => {
+        btn.addEventListener("click", event => {
+            console.log(taskList);
+            const taskNumber = btn.parentElement.getAttribute("data-number");
+            taskList.splice(taskNumber, 1)
+            console.log(taskList);
+            addToLocalStorage();
+            createInbox();
         })
     })
 }

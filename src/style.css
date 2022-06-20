@@ -144,6 +144,11 @@ li {
     margin: 1rem;
     padding: 1rem;
     border-bottom: 1px solid black;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 2rem;
 }
 
 .blur {
@@ -240,4 +245,11 @@ label {
 .checked {
     text-decoration: line-through;
     opacity: 0.5;
+}
+
+.trash-btn {
+    display: block;
+    width: 32px;
+    height: auto;
+    cursor: pointer;
 }

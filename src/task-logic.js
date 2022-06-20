@@ -15,7 +15,7 @@ class Task {
         this.taskCategory = taskCategory;
         this.taskDate = taskDate;
         this.taskPriority = taskPriority;
-        this.checked = true;
+        this.checked = false;
     }
 }
 
