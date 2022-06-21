@@ -6,10 +6,7 @@ import { taskList, addTaskToTaskList, getFromLocalStorage, clearLocalStorage, se
 
 
 const renderPage = () => {
-    createWrapper();
-    createHeader();
-    createMain();
-    createFooter();
+    getFromLocalStorage();
     createPage();
 };
 
@@ -67,6 +64,9 @@ const createMain = () => {
     mainMenuDiv.classList.add("menu");
     const mainMenuDivNav = document.createElement("nav");
     const mainMenuDivNavUl = document.createElement("ul");
+    mainMenuDivNavUl.classList.add("base-list");
+    const mainMenuDivNavUlProject = document.createElement("ul");
+    mainMenuDivNavUlProject.classList.add("projects-list");
     const mainMenuDivNavUlLi1 = document.createElement("li");
     mainMenuDivNavUlLi1.classList.add("nav-list-inbox");
     mainMenuDivNavUlLi1.textContent = "Inbox";
@@ -81,6 +81,7 @@ const createMain = () => {
     main.appendChild(mainMenuDiv);
     mainMenuDiv.appendChild(mainMenuDivNav);
     mainMenuDivNav.appendChild(mainMenuDivNavUl);
+    mainMenuDivNav.appendChild(mainMenuDivNavUlProject);
     mainMenuDivNavUl.appendChild(mainMenuDivNavUlLi1);
     mainMenuDivNavUl.appendChild(mainMenuDivNavUlLi2);
     mainMenuDivNavUl.appendChild(mainMenuDivNavUlLi3);
@@ -88,6 +89,9 @@ const createMain = () => {
     
     return main;
 }
+
+
+
 
 const createFooter = () => {
     const footer = document.createElement("footer");
@@ -115,17 +119,18 @@ const createPage = () => {
     document.querySelector(".nav-list-inbox").addEventListener("click", createInbox);
     document.querySelector(".nav-list-today").addEventListener("click", createToday);
     document.querySelector(".nav-list-week").addEventListener("click", createWeek);
+    createProjectList();
 }
 
-const clearContent = () => {
-    let myNode = document.querySelector(".content");
+const clearContent = (nodeToClear) => {
+    let myNode = document.querySelector(nodeToClear);
     while (myNode.firstChild) {
       myNode.removeChild(myNode.lastChild);
 }
 }
 
 const createInbox = () => {
-    clearContent();
+    clearContent(".content");
     const inboxWrapper = document.createElement("div");
     inboxWrapper.classList.add("inbox-wrapper");
     const inboxHeader = document.createElement("h2");
@@ -146,7 +151,7 @@ const createInbox = () => {
 
 
 const createToday = () => {
-    clearContent();
+    clearContent(".content");
     const todayWrapper = document.createElement("div");
     todayWrapper.classList.add("today-wrapper");
     const todayHeader = document.createElement("h2");
@@ -163,7 +168,7 @@ const createToday = () => {
 }
 
 const createWeek = () => {
-    clearContent();
+    clearContent(".content");
     const weekWrapper = document.createElement("div");
     weekWrapper.classList.add("week-wrapper");
     const weekHeader = document.createElement("h2");
@@ -180,7 +185,7 @@ const createWeek = () => {
 }
 
 const createTaskElement = () => {
-    getFromLocalStorage();
+    
     if (taskList === null) setEmptyArrayTaskList();
     for (let i = 0; i < taskList.length; i++) {
     console.log(taskList[i]);
@@ -196,25 +201,44 @@ const createTaskElement = () => {
     taskCardCheck.setAttribute("type", "checkbox");
     if (taskList[i].checked === true) taskCardCheck.checked = true;
     const taskCardName = document.createElement("div");
+    taskCardName.classList.add("small-task-name")
     taskCardName.textContent = taskList[i].taskName;
+    
+    const taskCardDate = document.createElement("div");
+    taskCardDate.classList.add("small-task-date");
+    taskCardDate.textContent = taskList[i].taskDate;
+
+    const smallTaskInfo = document.createElement("div");
+    smallTaskInfo.classList.add("small-task-info");
+
+    const bigTaskInfo = document.createElement("div");
+    bigTaskInfo.classList.add("big-task-info");
+    bigTaskInfo.classList.add("inactive");
+    bigTaskInfo.textContent = "ads";
 
     const deleteTaskBtn = document.createElement("img");
     deleteTaskBtn.classList.add("trash-btn");
     deleteTaskBtn.setAttribute("src", TrashImage);
-    taskCard.appendChild(taskCardCheck);
-    taskCard.appendChild(taskCardName);
-    taskCard.appendChild(deleteTaskBtn);
+    
+    smallTaskInfo.appendChild(taskCardCheck);
+    smallTaskInfo.appendChild(taskCardName);
+    smallTaskInfo.appendChild(taskCardDate);
+    smallTaskInfo.appendChild(deleteTaskBtn);
+    
+    taskCard.appendChild(smallTaskInfo);
+    taskCard.appendChild(bigTaskInfo);
     document.querySelector(".list-wrapper").appendChild(taskCard);
     }
 
     const checkBtns = document.querySelectorAll("input[type=checkbox]")
     checkBtns.forEach(btn => {
         btn.addEventListener("click", event => {
+            event.stopPropagation();
             btn.checked != btn.checked;
-            const taskNumber = btn.parentElement.getAttribute("data-number");
+            const taskNumber = btn.parentElement.parentElement.getAttribute("data-number");
             taskList[taskNumber].checked = btn.checked;
             console.log(taskList[taskNumber].checked)
-            btn.parentElement.classList.toggle("checked");
+            document.querySelector(`[data-number="${taskNumber}"]`).classList.toggle("checked");;
             addToLocalStorage();
         })
     })
@@ -222,15 +246,33 @@ const createTaskElement = () => {
     const deleteBtn = document.querySelectorAll(".trash-btn");
     deleteBtn.forEach(btn => {
         btn.addEventListener("click", event => {
-            console.log(taskList);
-            const taskNumber = btn.parentElement.getAttribute("data-number");
+            event.stopPropagation();
+            const taskNumber = btn.parentElement.parentElement.getAttribute("data-number");
             taskList.splice(taskNumber, 1)
             console.log(taskList);
             addToLocalStorage();
             createInbox();
+            createProjectList();
+        })
+    })
+
+    const taskDiv = document.querySelectorAll(".task-card");
+    taskDiv.forEach(div => {
+        div.addEventListener("click", event => {
+            const taskNumber = div.getAttribute("data-number");
+            document.querySelector(`[data-number="${taskNumber}"]`).lastChild.classList.toggle("inactive");
+     /*        console.log(taskList);
+            const taskNumber = btn.parentElement.getAttribute("data-number");
+            taskList.splice(taskNumber, 1)
+            console.log(taskList);
+            addToLocalStorage();
+            createInbox(); */
         })
     })
 }
+
+
+
     /* taskList.forEach(element => {
     const taskObjectsList = document.createElement("div");
     taskObjectsList.textContent = JSON.stringify(element);
@@ -320,12 +362,15 @@ const addTaskContainer =() => {
     addTaskContainerConfirmBtn.textContent = "Confirm";
     addTaskContainerButtons.appendChild(addTaskContainerConfirmBtn);
     addTaskContainerConfirmBtn.addEventListener("click", addTaskToTaskList);
+    addTaskContainerConfirmBtn.addEventListener("click", createProjectList);
     const addTaskContainerCancelBtn = document.createElement("button");
     addTaskContainerCancelBtn.classList.add("cancel-new-task");
     addTaskContainerCancelBtn.textContent = "Cancel";
     addTaskContainerButtons.appendChild(addTaskContainerCancelBtn);
     addTaskContainerCancelBtn.addEventListener("click", toggleAddTaskContainer);
     addTaskContainerCancelBtn.addEventListener("click", clearInput);
+
+    
 }
 
 const toggleAddTaskContainer = () => {
@@ -339,4 +384,21 @@ const clearInput = () => {
     document.querySelector("#task-name-input").value = "";
     document.querySelector("#task-details-input").value = "";
     document.querySelector("#task-category-input").value = "";
+}
+const createProjectList = () => {
+    clearContent(".projects-list");
+   /*  let myNode = document.querySelector(".projects-list");
+    while (myNode.firstChild) {
+      myNode.removeChild(myNode.lastChild);
+    }  */
+
+    let navSet = new Set();
+    taskList.forEach(task => navSet.add(task["taskCategory"]));
+    console.log(navSet);
+    navSet.forEach(item => {
+        if (item === "") return;
+        const newProjectInList = document.createElement("li");
+        newProjectInList.textContent = item;
+        document.querySelector(".projects-list").appendChild(newProjectInList);
+    })
 }
