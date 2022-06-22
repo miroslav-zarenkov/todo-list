@@ -184,29 +184,29 @@ const createWeek = () => {
     weekWrapper.appendChild(addTaskBtn);
 }
 
-const createTaskElement = () => {
+const createTaskElement = (chooseTaskList = taskList) => {
     
-    if (taskList === null) setEmptyArrayTaskList();
-    for (let i = 0; i < taskList.length; i++) {
-    console.log(taskList[i]);
+    if (chooseTaskList === null) {chooseTaskList = []};
+    for (let i = 0; i < chooseTaskList.length; i++) {
+    console.log(chooseTaskList[i]);
     const taskCard = document.createElement("div");
     taskCard.classList.add("task-card");
     taskCard.setAttribute("data-number", i);
-    if (taskList[i].taskPriority === "high") taskCard.classList.add("high-importance");
-    if (taskList[i].taskPriority === "medium") taskCard.classList.add("medium-importance");
-    if (taskList[i].taskPriority === "low") taskCard.classList.add("low-importance");
-    if (taskList[i].checked === true) taskCard.classList.add("checked");
+    if (chooseTaskList[i].taskPriority === "high") taskCard.classList.add("high-importance");
+    if (chooseTaskList[i].taskPriority === "medium") taskCard.classList.add("medium-importance");
+    if (chooseTaskList[i].taskPriority === "low") taskCard.classList.add("low-importance");
+    if (chooseTaskList[i].checked === true) taskCard.classList.add("checked");
     
     const taskCardCheck = document.createElement("input");
     taskCardCheck.setAttribute("type", "checkbox");
-    if (taskList[i].checked === true) taskCardCheck.checked = true;
+    if (chooseTaskList[i].checked === true) taskCardCheck.checked = true;
     const taskCardName = document.createElement("div");
     taskCardName.classList.add("small-task-name")
-    taskCardName.textContent = taskList[i].taskName;
+    taskCardName.textContent = chooseTaskList[i].taskName;
     
     const taskCardDate = document.createElement("div");
     taskCardDate.classList.add("small-task-date");
-    taskCardDate.textContent = taskList[i].taskDate;
+    taskCardDate.textContent = chooseTaskList[i].taskDate;
 
     const smallTaskInfo = document.createElement("div");
     smallTaskInfo.classList.add("small-task-info");
@@ -393,12 +393,55 @@ const createProjectList = () => {
     }  */
 
     let navSet = new Set();
+    if (taskList === null) return;
     taskList.forEach(task => navSet.add(task["taskCategory"]));
-    console.log(navSet);
     navSet.forEach(item => {
         if (item === "") return;
         const newProjectInList = document.createElement("li");
         newProjectInList.textContent = item;
         document.querySelector(".projects-list").appendChild(newProjectInList);
     })
-}
+
+    /* const navProjectListTasks = document.querySelector(".projects-list");
+    const stuff = navProjectListTasks.children;
+    
+    
+    myArray.forEach(addEventListener("click", console.log("PAPA"))); */
+
+   /*  document.querySelector(".projects-list").children.forEach(child =>{
+        child.addEventListener("click", event => {
+            console.log("PAPA");
+        })
+    }) */
+    const projectsListArray = document.querySelector(".projects-list").children;
+    console.log(projectsListArray)
+    const kekfunction = () => console.log("this is list")
+    for (let item of projectsListArray) {
+        item.addEventListener("click", switchTab)
+    }
+
+    function switchTab(){
+        let tabValue = this.innerText;
+        console.log(tabValue);
+        let getTab = taskList.filter(item => item.taskCategory === tabValue);
+        console.log(getTab)
+
+        clearContent(".content");
+        const inboxWrapper = document.createElement("div");
+        inboxWrapper.classList.add("inbox-wrapper");
+        const inboxHeader = document.createElement("h2");
+        inboxHeader.textContent = "Inbox";
+        inboxWrapper.appendChild(inboxHeader);
+        document.querySelector(".content").appendChild(inboxWrapper);
+        const listWrapper = document.createElement("div");
+        listWrapper.classList.add("list-wrapper");
+        inboxWrapper.appendChild(listWrapper);
+        createTaskElement(getTab);
+        const addTaskBtn = document.createElement("button");
+        addTaskBtn.classList.add("add-task-btn", "active");
+        addTaskBtn.textContent = "Add task";
+        addTaskBtn.addEventListener("click", toggleAddTaskContainer);
+        inboxWrapper.appendChild(addTaskBtn);
+        addTaskContainer();
+    }
+}   
