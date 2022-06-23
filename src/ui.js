@@ -1,14 +1,13 @@
-export { renderPage, clearContent, createInbox, toggleAddTaskContainer };
+export { renderPage, clearContent, createInbox, toggleAddTaskContainer, clearInput };
 import './style.css';
 import GithubLogo from './github.png';
 import TrashImage from './trash.png'
-import { taskList, addTaskToTaskList, getFromLocalStorage, clearLocalStorage, setEmptyArrayTaskList,addToLocalStorage } from './task-logic';
+import { taskList, addTaskToTaskList, getFromLocalStorage, addToLocalStorage } from './task-logic';
 import { parseISO, isToday, isThisWeek } from 'date-fns'
 
-const renderPage = () => {
+const renderPage = (event) => {
     getFromLocalStorage();
-    createPage();
-    console.log("HUY")
+    createPage(event);
 };
 
 const createWrapper = () => {
@@ -43,18 +42,12 @@ const createHeader = () => {
     headerMenuButton.appendChild(headerMenuButtonRow1);
     headerMenuButton.appendChild(headerMenuButtonRow2);
     headerMenuButton.appendChild(headerMenuButtonRow3);
+
     headerMenuButton.addEventListener('click', () => {
-    headerMenuButton.classList.toggle("change");
-    });
-    headerMenuButton.addEventListener('click', () => {
+        headerMenuButton.classList.toggle("change");
         document.querySelector("main").classList.toggle("active-overlay");
         document.querySelector(".menu").classList.toggle("active-overlay");
     });
-
-    const trash = document.createElement("button");
-    trash.textContent = "Delete local storage";
-    trash.addEventListener("click", clearLocalStorage);
-    header.appendChild(trash);
     
     return header;
 }
@@ -91,9 +84,6 @@ const createMain = () => {
     return main;
 }
 
-
-
-
 const createFooter = () => {
     const footer = document.createElement("footer");
     const footerDiv = document.createElement("div");
@@ -108,126 +98,89 @@ const createFooter = () => {
     footer.appendChild(footerDiv);
     footer.appendChild(footerLink);
     footerLink.appendChild(footerLinkImg);
+
     return footer;
 }
 
-const createPage = () => {
+const createPage = (event) => {
     document.body.appendChild(createWrapper());
     document.querySelector(".main-wrapper").appendChild(createHeader());
     document.querySelector(".main-wrapper").appendChild(createMain());
     document.querySelector(".main-wrapper").appendChild(createFooter());
-    createInbox();
-    document.querySelector(".nav-list-inbox").addEventListener("click", createInbox);
-    document.querySelector(".nav-list-today").addEventListener("click", createToday);
-    document.querySelector(".nav-list-week").addEventListener("click", createWeek);
+    createInbox(event);
     createProjectList();
 }
 
-const clearContent = (nodeToClear) => {
-    let myNode = document.querySelector(nodeToClear);
-    while (myNode.firstChild) {
-      myNode.removeChild(myNode.lastChild);
-}
-}
-
-const createInbox = () => {
+const createInbox = (event) => {
+    let tabValue = event.target.innerText || "Inbox";
+    let getTab;
+    if (tabValue === "Confirm") tabValue = "Inbox";
+    if (tabValue === "Inbox"){
+       getTab = taskList;
+    }else if (tabValue === "Today"){
+       getTab = taskList.filter(item => isToday(parseISO(item.taskDate)));
+    }else if (tabValue === "This Week"){
+       getTab = taskList.filter(item => isThisWeek(parseISO(item.taskDate)));
+    }
     clearContent(".content");
     const inboxWrapper = document.createElement("div");
     inboxWrapper.classList.add("inbox-wrapper");
     const inboxHeader = document.createElement("h2");
-    inboxHeader.textContent = "Inbox";
+    inboxHeader.textContent = tabValue;
     inboxWrapper.appendChild(inboxHeader);
     document.querySelector(".content").appendChild(inboxWrapper);
     const listWrapper = document.createElement("div");
     listWrapper.classList.add("list-wrapper");
     inboxWrapper.appendChild(listWrapper);
-    createTaskElement();
+    createTaskElement(getTab);
     const addTaskBtn = document.createElement("button");
     addTaskBtn.classList.add("add-task-btn", "active");
     addTaskBtn.textContent = "Add task";
     addTaskBtn.addEventListener("click", toggleAddTaskContainer);
     inboxWrapper.appendChild(addTaskBtn);
+    
     addTaskContainer();
 }
 
-
-const createToday = () => {
-    clearContent(".content");
-    const todayWrapper = document.createElement("div");
-    todayWrapper.classList.add("today-wrapper");
-    const todayHeader = document.createElement("h2");
-    todayHeader.textContent = "Today";
-    todayWrapper.appendChild(todayHeader);
-    document.querySelector(".content").appendChild(todayWrapper);
-    const taskObjectsList = document.createElement("div");
-    taskObjectsList.textContent = JSON.stringify(taskList);
-    todayWrapper.appendChild(taskObjectsList);
-
-    const addTaskBtn = document.createElement("button");
-    addTaskBtn.textContent = "Add task";
-    todayWrapper.appendChild(addTaskBtn);
-}
-
-const createWeek = () => {
-    clearContent(".content");
-    const weekWrapper = document.createElement("div");
-    weekWrapper.classList.add("week-wrapper");
-    const weekHeader = document.createElement("h2");
-    weekHeader.textContent = "This Week";
-    weekWrapper.appendChild(weekHeader);
-    document.querySelector(".content").appendChild(weekWrapper);
-    const taskObjectsList = document.createElement("div");
-    taskObjectsList.textContent = JSON.stringify(taskList);
-    weekWrapper.appendChild(taskObjectsList);
-
-    const addTaskBtn = document.createElement("button");
-    addTaskBtn.textContent = "Add task";
-    weekWrapper.appendChild(addTaskBtn);
-}
-
-const createTaskElement = (chooseTaskList = taskList) => {
-    
+const createTaskElement = (chooseTaskList) => {
     if (chooseTaskList === null) {chooseTaskList = []};
+    if (chooseTaskList === undefined) {chooseTaskList = []};
     for (let i = 0; i < chooseTaskList.length; i++) {
-    const taskCard = document.createElement("div");
-    taskCard.classList.add("task-card");
-    taskCard.setAttribute("data-number", i);
-    if (chooseTaskList[i].taskPriority === "high") taskCard.classList.add("high-importance");
-    if (chooseTaskList[i].taskPriority === "medium") taskCard.classList.add("medium-importance");
-    if (chooseTaskList[i].taskPriority === "low") taskCard.classList.add("low-importance");
-    if (chooseTaskList[i].checked === true) taskCard.classList.add("checked");
-    
-    const taskCardCheck = document.createElement("input");
-    taskCardCheck.setAttribute("type", "checkbox");
-    if (chooseTaskList[i].checked === true) taskCardCheck.checked = true;
-    const taskCardName = document.createElement("div");
-    taskCardName.classList.add("small-task-name")
-    taskCardName.textContent = chooseTaskList[i].taskName;
-    
-    const taskCardDate = document.createElement("div");
-    taskCardDate.classList.add("small-task-date");
-    taskCardDate.textContent = chooseTaskList[i].taskDate;
+        const taskCard = document.createElement("div");
+        taskCard.classList.add("task-card");
+        taskCard.setAttribute("data-number", i);
+        if (chooseTaskList[i].taskPriority === "high") taskCard.classList.add("high-importance");
+        if (chooseTaskList[i].taskPriority === "medium") taskCard.classList.add("medium-importance");
+        if (chooseTaskList[i].taskPriority === "low") taskCard.classList.add("low-importance");
+        if (chooseTaskList[i].checked === true) taskCard.classList.add("checked");
+        
+        const taskCardCheck = document.createElement("input");
+        taskCardCheck.setAttribute("type", "checkbox");
+        if (chooseTaskList[i].checked === true) taskCardCheck.checked = true;
+        const taskCardName = document.createElement("div");
+        taskCardName.classList.add("small-task-name")
+        taskCardName.textContent = chooseTaskList[i].taskName;
+        const taskCardDate = document.createElement("div");
+        taskCardDate.classList.add("small-task-date");
+        taskCardDate.textContent = chooseTaskList[i].taskDate;
+        const smallTaskInfo = document.createElement("div");
+        smallTaskInfo.classList.add("small-task-info");
+        const bigTaskInfo = document.createElement("div");
+        bigTaskInfo.classList.add("big-task-info");
+        bigTaskInfo.classList.add("inactive");
+        bigTaskInfo.textContent = "ads";
+        const deleteTaskBtn = document.createElement("img");
+        deleteTaskBtn.classList.add("trash-btn");
+        deleteTaskBtn.setAttribute("src", TrashImage);
 
-    const smallTaskInfo = document.createElement("div");
-    smallTaskInfo.classList.add("small-task-info");
+        smallTaskInfo.appendChild(taskCardCheck);
+        smallTaskInfo.appendChild(taskCardName);
+        smallTaskInfo.appendChild(taskCardDate);
+        smallTaskInfo.appendChild(deleteTaskBtn);
+        taskCard.appendChild(smallTaskInfo);
+        taskCard.appendChild(bigTaskInfo);
 
-    const bigTaskInfo = document.createElement("div");
-    bigTaskInfo.classList.add("big-task-info");
-    bigTaskInfo.classList.add("inactive");
-    bigTaskInfo.textContent = "ads";
-
-    const deleteTaskBtn = document.createElement("img");
-    deleteTaskBtn.classList.add("trash-btn");
-    deleteTaskBtn.setAttribute("src", TrashImage);
-    
-    smallTaskInfo.appendChild(taskCardCheck);
-    smallTaskInfo.appendChild(taskCardName);
-    smallTaskInfo.appendChild(taskCardDate);
-    smallTaskInfo.appendChild(deleteTaskBtn);
-    
-    taskCard.appendChild(smallTaskInfo);
-    taskCard.appendChild(bigTaskInfo);
-    document.querySelector(".list-wrapper").appendChild(taskCard);
+        document.querySelector(".list-wrapper").appendChild(taskCard);
     }
 
     const checkBtns = document.querySelectorAll("input[type=checkbox]")
@@ -237,7 +190,6 @@ const createTaskElement = (chooseTaskList = taskList) => {
             btn.checked != btn.checked;
             const taskNumber = btn.parentElement.parentElement.getAttribute("data-number");
             taskList[taskNumber].checked = btn.checked;
-            console.log(taskList[taskNumber].checked)
             document.querySelector(`[data-number="${taskNumber}"]`).classList.toggle("checked");;
             addToLocalStorage();
         })
@@ -249,9 +201,8 @@ const createTaskElement = (chooseTaskList = taskList) => {
             event.stopPropagation();
             const taskNumber = btn.parentElement.parentElement.getAttribute("data-number");
             taskList.splice(taskNumber, 1)
-            console.log(taskList);
             addToLocalStorage();
-            createInbox();
+            createInbox(event);
             createProjectList();
         })
     })
@@ -259,28 +210,14 @@ const createTaskElement = (chooseTaskList = taskList) => {
     const taskDiv = document.querySelectorAll(".task-card");
     taskDiv.forEach(div => {
         div.addEventListener("click", event => {
+            event.stopPropagation();
             const taskNumber = div.getAttribute("data-number");
             document.querySelector(`[data-number="${taskNumber}"]`).lastChild.classList.toggle("inactive");
-     /*        console.log(taskList);
-            const taskNumber = btn.parentElement.getAttribute("data-number");
-            taskList.splice(taskNumber, 1)
-            console.log(taskList);
-            addToLocalStorage();
-            createInbox(); */
         })
     })
 }
 
-
-
-    /* taskList.forEach(element => {
-    const taskObjectsList = document.createElement("div");
-    taskObjectsList.textContent = JSON.stringify(element);
-    document.querySelector(".list-wrapper").appendChild(taskObjectsList);
-}); */
-
-
-const addTaskContainer =() => {
+const addTaskContainer = () => {
     const addTaskContainer = document.createElement("div");
     addTaskContainer.classList.add("add-task-container", "inactive");
     document.querySelector(".inbox-wrapper").appendChild(addTaskContainer);
@@ -363,14 +300,13 @@ const addTaskContainer =() => {
     addTaskContainerButtons.appendChild(addTaskContainerConfirmBtn);
     addTaskContainerConfirmBtn.addEventListener("click", addTaskToTaskList);
     addTaskContainerConfirmBtn.addEventListener("click", createProjectList);
+
     const addTaskContainerCancelBtn = document.createElement("button");
     addTaskContainerCancelBtn.classList.add("cancel-new-task");
     addTaskContainerCancelBtn.textContent = "Cancel";
     addTaskContainerButtons.appendChild(addTaskContainerCancelBtn);
     addTaskContainerCancelBtn.addEventListener("click", toggleAddTaskContainer);
     addTaskContainerCancelBtn.addEventListener("click", clearInput);
-
-    
 }
 
 const toggleAddTaskContainer = () => {
@@ -384,13 +320,12 @@ const clearInput = () => {
     document.querySelector("#task-name-input").value = "";
     document.querySelector("#task-details-input").value = "";
     document.querySelector("#task-category-input").value = "";
+    document.querySelector("#task-date-input").value = "";
+    document.querySelector("#task-priority-input").value = "";
 }
+
 const createProjectList = () => {
     clearContent(".projects-list");
-   /*  let myNode = document.querySelector(".projects-list");
-    while (myNode.firstChild) {
-      myNode.removeChild(myNode.lastChild);
-    }  */
 
     let navSet = new Set();
     if (taskList === null) return;
@@ -402,17 +337,6 @@ const createProjectList = () => {
         document.querySelector(".projects-list").appendChild(newProjectInList);
     })
 
-    /* const navProjectListTasks = document.querySelector(".projects-list");
-    const stuff = navProjectListTasks.children;
-    
-    
-    myArray.forEach(addEventListener("click", console.log("PAPA"))); */
-
-   /*  document.querySelector(".projects-list").children.forEach(child =>{
-        child.addEventListener("click", event => {
-            console.log("PAPA");
-        })
-    }) */
     const projectsListArray = document.querySelector(".projects-list").children;
     for (let item of projectsListArray) {
         item.addEventListener("click", switchTabCategory)
@@ -422,41 +346,46 @@ const createProjectList = () => {
     for (let item of baseListArray) {
         item.addEventListener("click", switchTabBase);
     }
-
-    function switchTabBase(){
-        let tabValue = this.innerText;
-        if (tabValue === "Today"){
-            let getTab = taskList.filter(item => isToday(parseISO(item.taskDate)));
-            console.log(getTab);
-        }
-        else if (tabValue === "This Week"){
-            let getTab = taskList.filter(item => isThisWeek(parseISO(item.taskDate)));
-            console.log(getTab);
-        }
-    }
-
-    function switchTabCategory(){
-        let tabValue = this.innerText;
-        console.log(tabValue);
-        let getTab = taskList.filter(item => item.taskCategory === tabValue);
-        console.log(getTab)
-
-        clearContent(".content");
-        const inboxWrapper = document.createElement("div");
-        inboxWrapper.classList.add("inbox-wrapper");
-        const inboxHeader = document.createElement("h2");
-        inboxHeader.textContent = "Inbox";
-        inboxWrapper.appendChild(inboxHeader);
-        document.querySelector(".content").appendChild(inboxWrapper);
-        const listWrapper = document.createElement("div");
-        listWrapper.classList.add("list-wrapper");
-        inboxWrapper.appendChild(listWrapper);
-        createTaskElement(getTab);
-        const addTaskBtn = document.createElement("button");
-        addTaskBtn.classList.add("add-task-btn", "active");
-        addTaskBtn.textContent = "Add task";
-        addTaskBtn.addEventListener("click", toggleAddTaskContainer);
-        inboxWrapper.appendChild(addTaskBtn);
-        addTaskContainer();
-    }
 }   
+
+function switchTabBase(event){
+    let tabValue = this.innerText || "Inbox";
+    if (tabValue === "Inbox"){
+        createInbox(event);
+    }
+    else if (tabValue === "Today"){
+        createInbox(event);
+    }
+    else if (tabValue === "This Week"){
+        createInbox(event);
+    }
+}
+
+function switchTabCategory(){
+    let tabValue = this.innerText;
+    let getTab = taskList.filter(item => item.taskCategory === tabValue);
+
+    clearContent(".content");
+    const inboxWrapper = document.createElement("div");
+    inboxWrapper.classList.add("inbox-wrapper");
+    const inboxHeader = document.createElement("h2");
+    inboxHeader.textContent = tabValue;
+    inboxWrapper.appendChild(inboxHeader);
+    document.querySelector(".content").appendChild(inboxWrapper);
+    const listWrapper = document.createElement("div");
+    listWrapper.classList.add("list-wrapper");
+    inboxWrapper.appendChild(listWrapper);
+    createTaskElement(getTab);
+    const addTaskBtn = document.createElement("button");
+    addTaskBtn.classList.add("add-task-btn", "active");
+    addTaskBtn.textContent = "Add task";
+    addTaskBtn.addEventListener("click", toggleAddTaskContainer);
+    inboxWrapper.appendChild(addTaskBtn);
+    addTaskContainer();
+}
+
+const clearContent = (nodeToClear) => {
+    let myNode = document.querySelector(nodeToClear);
+    while (myNode.firstChild) {
+      myNode.removeChild(myNode.lastChild);
+}}
