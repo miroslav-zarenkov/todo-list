@@ -3,11 +3,12 @@ import './style.css';
 import GithubLogo from './github.png';
 import TrashImage from './trash.png'
 import { taskList, addTaskToTaskList, getFromLocalStorage, clearLocalStorage, setEmptyArrayTaskList,addToLocalStorage } from './task-logic';
-
+import { parseISO, isToday, isThisWeek } from 'date-fns'
 
 const renderPage = () => {
     getFromLocalStorage();
     createPage();
+    console.log("HUY")
 };
 
 const createWrapper = () => {
@@ -188,7 +189,6 @@ const createTaskElement = (chooseTaskList = taskList) => {
     
     if (chooseTaskList === null) {chooseTaskList = []};
     for (let i = 0; i < chooseTaskList.length; i++) {
-    console.log(chooseTaskList[i]);
     const taskCard = document.createElement("div");
     taskCard.classList.add("task-card");
     taskCard.setAttribute("data-number", i);
@@ -414,13 +414,28 @@ const createProjectList = () => {
         })
     }) */
     const projectsListArray = document.querySelector(".projects-list").children;
-    console.log(projectsListArray)
-    const kekfunction = () => console.log("this is list")
     for (let item of projectsListArray) {
-        item.addEventListener("click", switchTab)
+        item.addEventListener("click", switchTabCategory)
     }
 
-    function switchTab(){
+    const baseListArray = document.querySelector(".base-list").children;
+    for (let item of baseListArray) {
+        item.addEventListener("click", switchTabBase);
+    }
+
+    function switchTabBase(){
+        let tabValue = this.innerText;
+        if (tabValue === "Today"){
+            let getTab = taskList.filter(item => isToday(parseISO(item.taskDate)));
+            console.log(getTab);
+        }
+        else if (tabValue === "This Week"){
+            let getTab = taskList.filter(item => isThisWeek(parseISO(item.taskDate)));
+            console.log(getTab);
+        }
+    }
+
+    function switchTabCategory(){
         let tabValue = this.innerText;
         console.log(tabValue);
         let getTab = taskList.filter(item => item.taskCategory === tabValue);
