@@ -33,7 +33,7 @@ header {
 
 h1 {
     font-size: 6rem;
-    margin: 1rem;
+    margin: 1rem 2rem;
 }
 
 h2 {
@@ -44,7 +44,8 @@ h2 {
 .menu-button {
     display: none;
     cursor: pointer;
-    margin: 20px;
+    margin-left: auto;
+    margin-right: 30px;
 
 }
 
@@ -137,6 +138,8 @@ nav {
     padding: 2rem;
     margin: 2rem;
     font-size: 3rem;
+    display: flex;
+    flex-direction: column;
 }
 
 ul {
@@ -193,7 +196,7 @@ li {
 }
 
 
-@media screen and (max-width: 500px) {
+@media screen and (max-width: 600px) {
     .menu-button {
         display: inline-block;
     }
@@ -217,15 +220,13 @@ main.active-overlay {
 .menu.active-overlay {
     /*hidind and showing sidebar on small screen*/
     position: relative;
-    height: 100%;
+    width: 100%;
     z-index: 99;
     display: flex;
 }
 
 .menu.active-overlay>nav {
     width: 100%;
-    display: flex;
-    justify-content: center;
     font-size: 4rem;
 }
 
@@ -310,5 +311,5 @@ label {
 
 .projects-list {
     overflow: auto;
-    height: 60vh;
+    height: 40vh;
 }

@@ -16,9 +16,10 @@ const createWrapper = () => {
     
     window.addEventListener("resize", function(){
         if (window.innerWidth > 500) {
-            document.querySelector("main").classList.remove("active-overlay")
+            /* document.querySelector("main").classList.remove("active-overlay") */
             document.querySelector(".menu").classList.remove("active-overlay");
             document.querySelector(".menu-button").classList.remove("change");
+            document.querySelector(".content").classList.remove("inactive");
         }
     });
     
@@ -43,11 +44,7 @@ const createHeader = () => {
     headerMenuButton.appendChild(headerMenuButtonRow2);
     headerMenuButton.appendChild(headerMenuButtonRow3);
 
-    headerMenuButton.addEventListener('click', () => {
-        headerMenuButton.classList.toggle("change");
-        document.querySelector("main").classList.toggle("active-overlay");
-        document.querySelector(".menu").classList.toggle("active-overlay");
-    });
+    headerMenuButton.addEventListener('click', closeMenu);
     
     return header;
 }
@@ -352,12 +349,15 @@ function switchTabBase(event){
     let tabValue = this.innerText || "Inbox";
     if (tabValue === "Inbox"){
         createInbox(event);
+        closeMenu();
     }
     else if (tabValue === "Today"){
         createInbox(event);
+        closeMenu();
     }
     else if (tabValue === "This Week"){
         createInbox(event);
+        closeMenu();
     }
 }
 
@@ -381,7 +381,14 @@ function switchTabCategory(){
     addTaskBtn.textContent = "Add task";
     addTaskBtn.addEventListener("click", toggleAddTaskContainer);
     inboxWrapper.appendChild(addTaskBtn);
+    closeMenu();
     addTaskContainer();
+}
+
+const closeMenu = () => {
+    document.querySelector(".menu-button").classList.toggle("change");
+    document.querySelector(".menu").classList.toggle("active-overlay");
+    document.querySelector(".content").classList.toggle("inactive");
 }
 
 const clearContent = (nodeToClear) => {
