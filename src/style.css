@@ -75,7 +75,6 @@ h2 {
 
 main {
     flex: 1 0 auto;
-    background-color: bisque;
     display: flex;
 }
 
@@ -237,6 +236,12 @@ main.active-overlay {
     border: 1px solid black;
     border-radius: 1rem;
     box-shadow: 0px 5px 10px 2px rgba(34, 60, 80, 0.2);
+    width: max(300px, 60%);
+    align-self: center;
+}
+
+.add-task-buttons-wrapper {
+    margin: auto;
 }
 
 .add-task-buttons-wrapper>button {
@@ -266,10 +271,14 @@ main.active-overlay {
 
 form {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: 1fr 1fr;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    grid-auto-rows: 1fr;
     margin: 1rem;
     padding: 1rem;
+    justify-content: center;
+    align-items: center;
+    justify-items: center;
+    align-content: center;
 }
 
 
@@ -278,10 +287,13 @@ label {
     flex-direction: column;
 }
 
+.add-task-container label,
 .add-task-container input,
 .add-task-container select,
 .add-task-container textarea {
-    width: 200px;
+    width: 90%;
+    margin: 0.5rem;
+    padding: 0.5rem;
 }
 
 .high-importance {
