@@ -177,8 +177,24 @@ li {
     padding: 0.5rem;
 }
 
+.small-task-name {
+    font-size: 2.5rem;
+}
+
 .small-task-date {
+    padding: 1rem;
     margin-left: auto;
+    font-size: 2rem;
+    border: 1px solid black;
+    border-radius: 3rem;
+}
+
+.date-trash-wrapper {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 1rem;
 }
 
 .blur {

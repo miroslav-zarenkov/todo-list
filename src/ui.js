@@ -3,7 +3,7 @@ import './style.css';
 import GithubLogo from './github.png';
 import TrashImage from './trash.png'
 import { taskList, addTaskToTaskList, getFromLocalStorage, addToLocalStorage } from './task-logic';
-import { parseISO, isToday, isThisWeek } from 'date-fns'
+import { parseISO, isToday, isThisWeek, format, parse } from 'date-fns'
 
 const renderPage = (event) => {
     getFromLocalStorage();
@@ -157,26 +157,34 @@ const createTaskElement = (chooseTaskList) => {
         const taskCardName = document.createElement("div");
         taskCardName.classList.add("small-task-name")
         taskCardName.textContent = chooseTaskList[i].taskName;
-        const taskCardDate = document.createElement("div");
-        taskCardDate.classList.add("small-task-date");
-        taskCardDate.textContent = chooseTaskList[i].taskDate;
+        
+        
         const smallTaskInfo = document.createElement("div");
         smallTaskInfo.classList.add("small-task-info");
         const bigTaskInfo = document.createElement("div");
         bigTaskInfo.classList.add("big-task-info");
         bigTaskInfo.classList.add("inactive");
         bigTaskInfo.textContent = "ads";
+        const dateTrashWrapper = document.createElement("div");
+        dateTrashWrapper.classList.add("date-trash-wrapper");
         const deleteTaskBtn = document.createElement("img");
         deleteTaskBtn.classList.add("trash-btn");
         deleteTaskBtn.setAttribute("src", TrashImage);
-
         smallTaskInfo.appendChild(taskCardCheck);
         smallTaskInfo.appendChild(taskCardName);
-        smallTaskInfo.appendChild(taskCardDate);
-        smallTaskInfo.appendChild(deleteTaskBtn);
+        let dateString;
+        if (chooseTaskList[i].taskDate !== "") dateString = chooseTaskList[i].taskDate;
+        if (dateString !== undefined) {
+            let formatedDate = format(parseISO(dateString), "dd-MM-yyyy");
+            const taskCardDate = document.createElement("div");
+            taskCardDate.classList.add("small-task-date");
+            taskCardDate.textContent = formatedDate;
+            dateTrashWrapper.appendChild(taskCardDate);
+        }
+        dateTrashWrapper.appendChild(deleteTaskBtn);
+        smallTaskInfo.appendChild(dateTrashWrapper);
         taskCard.appendChild(smallTaskInfo);
         taskCard.appendChild(bigTaskInfo);
-
         document.querySelector(".list-wrapper").appendChild(taskCard);
     }
 
