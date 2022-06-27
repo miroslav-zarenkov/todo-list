@@ -162,7 +162,7 @@ li {
     justify-content: center;
     gap: 2rem;
     transition: 0.5s;
-    cursor: pointer;
+    cursor: context-menu;
 }
 
 .small-task-info {
@@ -178,13 +178,13 @@ li {
 }
 
 .small-task-name {
-    font-size: 2.5rem;
+    font-size: 3rem;
 }
 
 .small-task-date {
     padding: 1rem;
     margin-left: auto;
-    font-size: 2rem;
+    font-size: 1.75rem;
     border: 1px solid black;
     border-radius: 3rem;
 }
@@ -310,6 +310,10 @@ label {
     width: 90%;
     margin: 0.5rem;
     padding: 0.5rem;
+}
+
+input[type=checkbox] {
+    cursor: pointer;
 }
 
 .high-importance {

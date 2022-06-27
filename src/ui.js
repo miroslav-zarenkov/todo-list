@@ -146,9 +146,9 @@ const createTaskElement = (chooseTaskList) => {
         const taskCard = document.createElement("div");
         taskCard.classList.add("task-card");
         taskCard.setAttribute("data-number", i);
-        if (chooseTaskList[i].taskPriority === "high") taskCard.classList.add("high-importance");
-        if (chooseTaskList[i].taskPriority === "medium") taskCard.classList.add("medium-importance");
-        if (chooseTaskList[i].taskPriority === "low") taskCard.classList.add("low-importance");
+        if (chooseTaskList[i].taskPriority === "High") taskCard.classList.add("high-importance");
+        if (chooseTaskList[i].taskPriority === "Medium") taskCard.classList.add("medium-importance");
+        if (chooseTaskList[i].taskPriority === "Low") taskCard.classList.add("low-importance");
         if (chooseTaskList[i].checked === true) taskCard.classList.add("checked");
         
         const taskCardCheck = document.createElement("input");
@@ -161,10 +161,33 @@ const createTaskElement = (chooseTaskList) => {
         
         const smallTaskInfo = document.createElement("div");
         smallTaskInfo.classList.add("small-task-info");
+
         const bigTaskInfo = document.createElement("div");
         bigTaskInfo.classList.add("big-task-info");
         bigTaskInfo.classList.add("inactive");
-        bigTaskInfo.textContent = "ads";
+
+        const bigTaskInfoName = document.createElement("div");
+        bigTaskInfoName.classList.add("big-task-info-name");
+        bigTaskInfoName.textContent = `Task: ${chooseTaskList[i].taskName}`;
+        const bigTaskInfoDate = document.createElement("div");
+        bigTaskInfoDate.classList.add("big-task-info-date");
+        bigTaskInfoDate.textContent = `Due date: ${chooseTaskList[i].taskDate}`;
+        const bigTaskInfoCategory = document.createElement("div");
+        bigTaskInfoCategory.classList.add("big-task-info-category");
+        bigTaskInfoCategory.textContent = `Category: ${chooseTaskList[i].taskCategory}`;
+        const bigTaskInfoPriority = document.createElement("div");
+        bigTaskInfoPriority.classList.add("big-task-info-priority");
+        bigTaskInfoPriority.textContent = `Priority: ${chooseTaskList[i].taskPriority}`;
+        const bigTaskInfoDetails = document.createElement("div");
+        bigTaskInfoDetails.classList.add("big-task-info-details");
+        bigTaskInfoDetails.textContent = `Details: ${chooseTaskList[i].taskDetails}`;
+
+        bigTaskInfo.appendChild(bigTaskInfoName);
+        bigTaskInfo.appendChild(bigTaskInfoDate);
+        bigTaskInfo.appendChild(bigTaskInfoCategory);
+        bigTaskInfo.appendChild(bigTaskInfoPriority);
+        bigTaskInfo.appendChild(bigTaskInfoDetails);
+
         const dateTrashWrapper = document.createElement("div");
         dateTrashWrapper.classList.add("date-trash-wrapper");
         const deleteTaskBtn = document.createElement("img");
@@ -274,13 +297,13 @@ const addTaskContainer = () => {
     taskPriorityLabelInputNone.setAttribute("value", "none");
     const taskPriorityLabelInputLow = document.createElement("option");
     taskPriorityLabelInputLow.textContent = "Low";
-    taskPriorityLabelInputLow.setAttribute("value", "low");
+    taskPriorityLabelInputLow.setAttribute("value", "Low");
     const taskPriorityLabelInputMedium = document.createElement("option");
     taskPriorityLabelInputMedium.textContent = "Medium";
-    taskPriorityLabelInputMedium.setAttribute("value", "medium");
+    taskPriorityLabelInputMedium.setAttribute("value", "Medium");
     const taskPriorityLabelInputHigh = document.createElement("option");
     taskPriorityLabelInputHigh.textContent = "High";
-    taskPriorityLabelInputHigh.setAttribute("value", "high");
+    taskPriorityLabelInputHigh.setAttribute("value", "High");
     taskPriorityLabelInput.setAttribute("id", "task-priority-input");
     taskPriorityLabelInput.setAttribute("name", "task-priority-input");
     taskPriorityLabelInput.appendChild(taskPriorityLabelInputNone);
