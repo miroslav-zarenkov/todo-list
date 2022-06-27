@@ -3,7 +3,7 @@ import './style.css';
 import GithubLogo from './github.png';
 import TrashImage from './trash.png'
 import { taskList, addTaskToTaskList, getFromLocalStorage, addToLocalStorage } from './task-logic';
-import { parseISO, isToday, isThisWeek, format, parse } from 'date-fns'
+import { parseISO, isToday, isThisWeek, format } from 'date-fns'
 
 const renderPage = (event) => {
     getFromLocalStorage();
@@ -15,8 +15,7 @@ const createWrapper = () => {
     mainWrapper.classList.add('main-wrapper');
     
     window.addEventListener("resize", function(){
-        if (window.innerWidth > 500) {
-            /* document.querySelector("main").classList.remove("active-overlay") */
+        if (window.innerWidth > 700) {
             document.querySelector(".menu").classList.remove("active-overlay");
             document.querySelector(".menu-button").classList.remove("change");
             document.querySelector(".content").classList.remove("inactive");
@@ -43,8 +42,7 @@ const createHeader = () => {
     headerMenuButton.appendChild(headerMenuButtonRow1);
     headerMenuButton.appendChild(headerMenuButtonRow2);
     headerMenuButton.appendChild(headerMenuButtonRow3);
-
-    headerMenuButton.addEventListener('click', closeMenu);
+    headerMenuButton.addEventListener('click', toggleMenu);
     
     return header;
 }
@@ -255,19 +253,26 @@ const addTaskContainer = () => {
 
     const taskNameLabel = document.createElement("label");
     taskNameLabel.setAttribute("for", "task-name-input");
-    taskNameLabel.textContent = "Task Name";
+    taskNameLabel.textContent = "Task Name*";
+    const taskRequiredAlert = document.createElement("div");
+    taskRequiredAlert.classList.add("required", "inactive");
+    taskRequiredAlert.textContent = "Required field";
+    
+
     const taskNameLabelInput = document.createElement("input");
     taskNameLabelInput.setAttribute("type", "text");
     taskNameLabelInput.setAttribute("id", "task-name-input");
     taskNameLabelInput.setAttribute("name", "task-name-input");
+    taskNameLabelInput.setAttribute("maxlength", "25");
     taskNameLabel.appendChild(taskNameLabelInput);
-
+    taskNameLabel.appendChild(taskRequiredAlert);
     const taskDetailsLabel = document.createElement("label");
     taskDetailsLabel.setAttribute("for", "task-detail-input");
     taskDetailsLabel.textContent = "Task Details";
     const taskDetailsLabelInput = document.createElement("textarea");
     taskDetailsLabelInput.setAttribute("id", "task-details-input");
     taskDetailsLabelInput.setAttribute("name", "task-details-input");
+    taskDetailsLabelInput.setAttribute("maxlength", "100");
     taskDetailsLabel.appendChild(taskDetailsLabelInput);
 
     const taskCategoryLabel = document.createElement("label");
@@ -277,6 +282,7 @@ const addTaskContainer = () => {
     taskCategoryLabelInput.setAttribute("type", "text");
     taskCategoryLabelInput.setAttribute("id", "task-category-input");
     taskCategoryLabelInput.setAttribute("name", "task-category-input");
+    taskCategoryLabelInput.setAttribute("maxlength", "25");
     taskCategoryLabel.appendChild(taskCategoryLabelInput);
 
     const taskDateLabel = document.createElement("label");
@@ -294,7 +300,7 @@ const addTaskContainer = () => {
     const taskPriorityLabelInput = document.createElement("select");
     const taskPriorityLabelInputNone = document.createElement("option");
     taskPriorityLabelInputNone.textContent = "";
-    taskPriorityLabelInputNone.setAttribute("value", "none");
+    taskPriorityLabelInputNone.setAttribute("value", "");
     const taskPriorityLabelInputLow = document.createElement("option");
     taskPriorityLabelInputLow.textContent = "Low";
     taskPriorityLabelInputLow.setAttribute("value", "Low");
@@ -350,6 +356,9 @@ const clearInput = () => {
     document.querySelector("#task-category-input").value = "";
     document.querySelector("#task-date-input").value = "";
     document.querySelector("#task-priority-input").value = "";
+    document.querySelector(".required").classList.toggle("inactive");
+    document.querySelector("#task-name-input").classList.toggle("red-alert");
+    document.querySelector("label[for='task-name-input']").classList.toggle("red-alert");
 }
 
 const createProjectList = () => {
@@ -420,6 +429,12 @@ const closeMenu = () => {
     document.querySelector(".menu-button").classList.toggle("change");
     document.querySelector(".menu").classList.remove("active-overlay");
     document.querySelector(".content").classList.remove("inactive");
+}
+
+const toggleMenu = () => {
+    document.querySelector(".menu-button").classList.toggle("change");
+    document.querySelector(".menu").classList.toggle("active-overlay");
+    document.querySelector(".content").classList.toggle("inactive");
 }
 
 const clearContent = (nodeToClear) => {

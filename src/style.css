@@ -5,7 +5,6 @@
 * {
     margin: 0;
     padding: 0;
-    /*outline: 1px solid red; */
 }
 
 html {
@@ -34,11 +33,14 @@ header {
 h1 {
     font-size: 6rem;
     margin: 1rem 2rem;
+    overflow-wrap: anywhere;
 }
 
 h2 {
     font-size: 4rem;
     margin: 1rem 0;
+    overflow-wrap: anywhere;
+    text-align: center;
 }
 
 .menu-button {
@@ -79,8 +81,8 @@ main {
 }
 
 .menu {
-    flex-shrink: 0;
     background-color: #f6f6f6;
+    word-break: break-word;
 }
 
 .menu li {
@@ -88,7 +90,7 @@ main {
 }
 
 .content {
-    flex: 1 0 auto;
+    flex: 1 1 auto;
     background-color: rgb(250 250 250);
     display: flex;
     justify-content: center;
@@ -119,6 +121,7 @@ footer {
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
+    word-break: break-word;
     background-color: var(--main-red);
     font-size: 2rem;
 }
@@ -146,7 +149,7 @@ ul {
 }
 
 li {
-    margin: 1rem;
+    margin: 0.5rem;
 }
 
 
@@ -160,7 +163,7 @@ li {
     flex-direction: column;
     align-items: flex-start;
     justify-content: center;
-    gap: 2rem;
+    gap: 0.5rem;
     transition: 0.5s;
     cursor: context-menu;
 }
@@ -179,6 +182,7 @@ li {
 
 .small-task-name {
     font-size: 3rem;
+    overflow-wrap: anywhere;
 }
 
 .small-task-date {
@@ -187,6 +191,7 @@ li {
     font-size: 1.75rem;
     border: 1px solid black;
     border-radius: 3rem;
+    text-align: center;
 }
 
 .date-trash-wrapper {
@@ -210,14 +215,25 @@ li {
     display: none;
 }
 
+.required {
+    font-size: 1.5rem;
+}
 
-@media screen and (max-width: 600px) {
+.red-alert {
+    color: red;
+    border-color: red;
+}
+
+textarea {
+    resize: vertical;
+}
+
+@media screen and (max-width: 700px) {
     .menu-button {
         display: inline-block;
     }
 
     .menu {
-        /*hidind and showing sidebar on small screen*/
         display: none;
     }
 }
@@ -228,16 +244,16 @@ li {
 }
 
 main.active-overlay {
-    /*hidind and showing sidebar on small screen*/
     display: block;
 }
 
 .menu.active-overlay {
-    /*hidind and showing sidebar on small screen*/
     position: relative;
     width: 100%;
     z-index: 99;
     display: flex;
+    text-align: center;
+    overflow-wrap: anywhere;
 }
 
 .menu.active-overlay>nav {
@@ -344,4 +360,18 @@ input[type=checkbox] {
 .projects-list {
     overflow: auto;
     height: 40vh;
+}
+
+.big-task-info {
+    overflow-wrap: anywhere;
+    width: 100%;
+    border-top: 1px solid gray;
+    padding-top: 1rem;
+}
+
+.big-task-info:not(.inactive) {
+    font-size: 2rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
 }
