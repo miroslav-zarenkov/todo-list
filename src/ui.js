@@ -387,8 +387,8 @@ function switchTabCategory(){
 
 const closeMenu = () => {
     document.querySelector(".menu-button").classList.toggle("change");
-    document.querySelector(".menu").classList.toggle("active-overlay");
-    document.querySelector(".content").classList.toggle("inactive");
+    document.querySelector(".menu").classList.remove("active-overlay");
+    document.querySelector(".content").classList.remove("inactive");
 }
 
 const clearContent = (nodeToClear) => {
