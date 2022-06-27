@@ -255,7 +255,7 @@ const addTaskContainer = () => {
     taskNameLabel.setAttribute("for", "task-name-input");
     taskNameLabel.textContent = "Task Name*";
     const taskRequiredAlert = document.createElement("div");
-    taskRequiredAlert.classList.add("required", "inactive");
+    taskRequiredAlert.classList.add("required", "hidden");
     taskRequiredAlert.textContent = "Required field";
     
 
@@ -356,7 +356,7 @@ const clearInput = () => {
     document.querySelector("#task-category-input").value = "";
     document.querySelector("#task-date-input").value = "";
     document.querySelector("#task-priority-input").value = "";
-    document.querySelector(".required").classList.toggle("inactive");
+    document.querySelector(".required").classList.toggle("hidden");
     document.querySelector("#task-name-input").classList.toggle("red-alert");
     document.querySelector("label[for='task-name-input']").classList.toggle("red-alert");
 }

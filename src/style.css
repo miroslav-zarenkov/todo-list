@@ -2,9 +2,16 @@
     --main-red: #c40505;
 }
 
+@font-face {
+    font-family: 'ShortStack';
+    src: url('./shortstack-regular-webfont.woff2') format('woff2'),
+        url('./shortstack-regular-webfont.woff') format('woff');
+}
+
 * {
     margin: 0;
     padding: 0;
+    font-family: monospace;
 }
 
 html {
@@ -34,6 +41,7 @@ h1 {
     font-size: 6rem;
     margin: 1rem 2rem;
     overflow-wrap: anywhere;
+    font-family: "ShortStack";
 }
 
 h2 {
@@ -41,6 +49,7 @@ h2 {
     margin: 1rem 0;
     overflow-wrap: anywhere;
     text-align: center;
+    font-family: "ShortStack";
 }
 
 .menu-button {
@@ -89,6 +98,10 @@ main {
     cursor: pointer;
 }
 
+.hidden {
+    visibility: hidden;
+}
+
 .content {
     flex: 1 1 auto;
     background-color: rgb(250 250 250);
@@ -124,10 +137,12 @@ footer {
     word-break: break-word;
     background-color: var(--main-red);
     font-size: 2rem;
+
 }
 
 footer>* {
     padding: 0.5rem;
+    font-family: "ShortStack";
 }
 
 .github-logo {

@@ -17,7 +17,7 @@ class Task {
 
 function addTaskToTaskList() {
     if (document.querySelector("#task-name-input").value === "") {
-        document.querySelector(".required").classList.remove("inactive");
+        document.querySelector(".required").classList.remove("hidden");
         document.querySelector("#task-name-input").classList.add("red-alert");
         document.querySelector("label[for='task-name-input']").classList.add("red-alert");
     }
