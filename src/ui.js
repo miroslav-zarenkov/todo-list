@@ -169,7 +169,12 @@ const createTaskElement = (chooseTaskList) => {
         bigTaskInfoName.textContent = `Task: ${chooseTaskList[i].taskName}`;
         const bigTaskInfoDate = document.createElement("div");
         bigTaskInfoDate.classList.add("big-task-info-date");
-        bigTaskInfoDate.textContent = `Due date: ${chooseTaskList[i].taskDate}`;
+        if (chooseTaskList[i].taskDate != ""){
+            let formatedDate = format(parseISO(chooseTaskList[i].taskDate), "dd-MM-yyyy");
+            bigTaskInfoDate.textContent = `Due date: ${formatedDate}`;
+        } else{
+            bigTaskInfoDate.textContent = `Due date:`;
+        }
         const bigTaskInfoCategory = document.createElement("div");
         bigTaskInfoCategory.classList.add("big-task-info-category");
         bigTaskInfoCategory.textContent = `Category: ${chooseTaskList[i].taskCategory}`;
@@ -356,9 +361,9 @@ const clearInput = () => {
     document.querySelector("#task-category-input").value = "";
     document.querySelector("#task-date-input").value = "";
     document.querySelector("#task-priority-input").value = "";
-    document.querySelector(".required").classList.toggle("hidden");
-    document.querySelector("#task-name-input").classList.toggle("red-alert");
-    document.querySelector("label[for='task-name-input']").classList.toggle("red-alert");
+    document.querySelector(".required").classList.add("hidden");
+    document.querySelector("#task-name-input").classList.remove("red-alert");
+    document.querySelector("label[for='task-name-input']").classList.remove("red-alert");
 }
 
 const createProjectList = () => {
