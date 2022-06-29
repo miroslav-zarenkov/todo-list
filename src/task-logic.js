@@ -26,7 +26,7 @@ function addTaskToTaskList() {
             taskList = [];
         }
     
-        let task = new Task(
+        const task = new Task(
             document.querySelector("#task-name-input").value,
             document.querySelector("#task-details-input").value,
             document.querySelector("#task-category-input").value,

@@ -170,7 +170,7 @@ const createTaskElement = (chooseTaskList) => {
         const bigTaskInfoDate = document.createElement("div");
         bigTaskInfoDate.classList.add("big-task-info-date");
         if (chooseTaskList[i].taskDate != ""){
-            let formatedDate = format(parseISO(chooseTaskList[i].taskDate), "dd-MM-yyyy");
+            const formatedDate = format(parseISO(chooseTaskList[i].taskDate), "dd-MM-yyyy");
             bigTaskInfoDate.textContent = `Due date: ${formatedDate}`;
         } else{
             bigTaskInfoDate.textContent = `Due date:`;
@@ -201,7 +201,7 @@ const createTaskElement = (chooseTaskList) => {
         let dateString;
         if (chooseTaskList[i].taskDate !== "") dateString = chooseTaskList[i].taskDate;
         if (dateString !== undefined) {
-            let formatedDate = format(parseISO(dateString), "dd-MM-yyyy");
+            const formatedDate = format(parseISO(dateString), "dd-MM-yyyy");
             const taskCardDate = document.createElement("div");
             taskCardDate.classList.add("small-task-date");
             taskCardDate.textContent = formatedDate;
@@ -230,7 +230,8 @@ const createTaskElement = (chooseTaskList) => {
     deleteBtn.forEach(btn => {
         btn.addEventListener("click", event => {
             event.stopPropagation();
-            const taskNumber = btn.parentElement.parentElement.getAttribute("data-number");
+            const taskNumber = btn.parentElement.parentElement.parentElement.getAttribute("data-number");
+            console.log(taskNumber)
             taskList.splice(taskNumber, 1)
             addToLocalStorage();
             createInbox(event);
@@ -380,18 +381,18 @@ const createProjectList = () => {
     })
 
     const projectsListArray = document.querySelector(".projects-list").children;
-    for (let item of projectsListArray) {
+    for (const item of projectsListArray) {
         item.addEventListener("click", switchTabCategory)
     }
 
     const baseListArray = document.querySelector(".base-list").children;
-    for (let item of baseListArray) {
+    for (const item of baseListArray) {
         item.addEventListener("click", switchTabBase);
     }
 }   
 
 function switchTabBase(event){
-    let tabValue = this.innerText || "Inbox";
+    const tabValue = this.innerText || "Inbox";
     if (tabValue === "Inbox"){
         createInbox(event);
         closeMenu();
@@ -407,8 +408,8 @@ function switchTabBase(event){
 }
 
 function switchTabCategory(){
-    let tabValue = this.innerText;
-    let getTab = taskList.filter(item => item.taskCategory === tabValue);
+    const tabValue = this.innerText;
+    const getTab = taskList.filter(item => item.taskCategory === tabValue);
 
     clearContent(".content");
     const inboxWrapper = document.createElement("div");
@@ -443,7 +444,7 @@ const toggleMenu = () => {
 }
 
 const clearContent = (nodeToClear) => {
-    let myNode = document.querySelector(nodeToClear);
+    const myNode = document.querySelector(nodeToClear);
     while (myNode.firstChild) {
       myNode.removeChild(myNode.lastChild);
 }}
